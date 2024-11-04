@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace api.Dtos.Tourist_Attraction
 {
-    public class CreateAttractionRequestDto
+    public class UpdateAttractionRequestDto
     {
-        public string Name {get; set;} = string.Empty;
+         public string Name {get; set;} = string.Empty;
         public string Description {get; set;} = string.Empty;
         public string Location {get; set;} = string.Empty;
         public string Photos { get; set; } = string.Empty;
