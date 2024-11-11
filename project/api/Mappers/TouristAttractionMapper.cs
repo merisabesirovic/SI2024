@@ -16,7 +16,8 @@ namespace api.Mappers
                     Description = touristAttractionModel.Description,
                     Location = touristAttractionModel.Location,
                     Photos = touristAttractionModel.Photos,
-                    CategoryId = touristAttractionModel.CategoryId
+                    CategoryId = touristAttractionModel.CategoryId,
+                    Reviews = touristAttractionModel.Reviews.Select(r => r.ToCommentDto()).ToList(),
                 };
         }
         public static TouristAttraction ToAttractionFromDto(this CreateAttractionRequestDto touristAttractionDto){

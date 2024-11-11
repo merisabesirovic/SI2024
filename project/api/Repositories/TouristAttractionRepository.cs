@@ -37,12 +37,12 @@ namespace api.Repositories
 
         public async Task<List<TouristAttraction>> GetAllAsync()
         {
-            return await _context.TouristAttractions.ToListAsync();
+            return await _context.TouristAttractions.Include(c => c.Reviews).ToListAsync();
         }
 
         public async Task<TouristAttraction?> GetAsyncById(int id)
         {
-            return await _context.TouristAttractions.FindAsync(id);
+            return await _context.TouristAttractions.Include(c => c.Reviews).FirstOrDefaultAsync(c=> c.Id == id);
         }
 
         public async Task<TouristAttraction?> UpdateAsync(int id, UpdateAttractionRequestDto attractionRequestDto)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.Reviews;
 
 namespace api.Dtos.Tourist_Attraction
 {
@@ -13,5 +14,6 @@ namespace api.Dtos.Tourist_Attraction
         public string Location {get; set;} = string.Empty;
          public string Photos { get; set; } = string.Empty;
          public int CategoryId { get; set; } 
+         public List<ReviewsDto> Reviews {get; set;}
     }
 }

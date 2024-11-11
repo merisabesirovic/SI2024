@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Models
+namespace api.Dtos.Reviews
 {
-    public class Review
-{
+    public class ReviewsDto
+    {
     public int Id { get; set; }
     public int Rating { get; set; }
     public string Comment { get; set; } = string.Empty;
     public DateTime CreatedOn {get; set;} = DateTime.Now;
     public int? TouristAttractionId {get; set;} 
-    public TouristAttraction TouristAttraction {get; set;} = new TouristAttraction();
-    public int UserId { get; set; }
-    public User User { get; set; } = new User();
-}
-
+    }
 }
