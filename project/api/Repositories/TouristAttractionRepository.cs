@@ -45,6 +45,11 @@ namespace api.Repositories
             return await _context.TouristAttractions.Include(c => c.Reviews).FirstOrDefaultAsync(c=> c.Id == id);
         }
 
+        public Task<bool> TouristAttractionExists(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<TouristAttraction?> UpdateAsync(int id, UpdateAttractionRequestDto attractionRequestDto)
         {
             var existingAttraction = await _context.TouristAttractions.FirstOrDefaultAsync(x=>x.Id == id);
