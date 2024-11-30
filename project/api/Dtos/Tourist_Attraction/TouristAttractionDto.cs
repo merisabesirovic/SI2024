@@ -13,7 +13,7 @@ namespace api.Dtos.Tourist_Attraction
         public string Description {get; set;} = string.Empty;
         public string Location {get; set;} = string.Empty;
          public string Photos { get; set; } = string.Empty;
-         public int CategoryId { get; set; } 
+         public string Category { get; set; } = string.Empty;
          public List<ReviewsDto> Reviews {get; set;}
     }
 }

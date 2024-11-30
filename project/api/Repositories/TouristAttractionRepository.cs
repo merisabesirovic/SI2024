@@ -47,7 +47,7 @@ namespace api.Repositories
 
         public Task<bool> TouristAttractionExists(int id)
         {
-            throw new NotImplementedException();
+            return _context.TouristAttractions.AnyAsync(s=> s.Id == id);
         }
 
         public async Task<TouristAttraction?> UpdateAsync(int id, UpdateAttractionRequestDto attractionRequestDto)
@@ -60,7 +60,7 @@ namespace api.Repositories
             existingAttraction.Description = attractionRequestDto.Description;
             existingAttraction.Location = attractionRequestDto.Location;
             existingAttraction.Photos = attractionRequestDto.Photos;
-            existingAttraction.CategoryId = attractionRequestDto.CategoryId;
+            existingAttraction.Category = attractionRequestDto.Category;
 
             await _context.SaveChangesAsync();
             return existingAttraction;

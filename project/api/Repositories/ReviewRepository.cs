@@ -15,6 +15,27 @@ namespace api.Repositories
         {
             _context = context;
         }
+
+    public async Task<Review> CreateAsync(Review reviewModel)
+{
+    _context.Entry(reviewModel).Reference(r => r.TouristAttraction).IsModified = false;
+
+    await _context.Reviews.AddAsync(reviewModel);
+    await _context.SaveChangesAsync();
+    return reviewModel;
+}
+
+        public async Task<Review?> DeleteAsync(int id)
+        {
+            var reviewModel = await _context.Reviews.FirstOrDefaultAsync(x=> x.Id == id);
+            if(reviewModel == null){
+                return null;
+            }
+            _context.Reviews.Remove(reviewModel);
+            await _context.SaveChangesAsync();
+            return reviewModel;
+        }
+
         public async Task<List<Review>> GetAllAsync()
         {
             return await _context.Reviews.ToListAsync();
@@ -24,5 +45,6 @@ namespace api.Repositories
         {
             return await _context.Reviews.FirstOrDefaultAsync(c => c.Id == id);
         }
+        
     }
 }

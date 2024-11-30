@@ -12,7 +12,7 @@ namespace api.Models
         public string Description {get; set;} = string.Empty;
         public string Location {get; set;} = string.Empty;
          public string Photos { get; set; } = string.Empty;
-         public int CategoryId { get; set; } 
+         public string Category{ get; set; } = string.Empty;
         public List<Review> Reviews { get; set; } = new List<Review>();
 
     }

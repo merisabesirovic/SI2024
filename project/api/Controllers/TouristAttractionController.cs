@@ -23,12 +23,16 @@ namespace api.Controllers
         }
         [HttpGet]
         public async Task <IActionResult> GetAll(){
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var tourist_attractions = await _attractionRepo.GetAllAsync();
             var tourist_attractionDto = tourist_attractions.Select(s=>s.ToAttractionDto());
             return Ok(tourist_attractions);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task <IActionResult> GetById([FromRoute] int id){
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var tourist_attraction =  await _attractionRepo.GetAsyncById(id);
             if(tourist_attraction == null){
                 return NotFound();
@@ -40,13 +44,17 @@ namespace api.Controllers
         }
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]CreateAttractionRequestDto attractionDto){
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var attractionModel = attractionDto.ToAttractionFromDto();
             await _attractionRepo.CreateAsync(attractionModel);
             return CreatedAtAction(nameof(GetById), new{id = attractionModel.Id}, attractionModel.ToAttractionDto());
         }
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateAttractionRequestDto updateDto){
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var attractionModel = await _attractionRepo.UpdateAsync(id, updateDto);
             if(attractionModel == null){
                 return NotFound();
@@ -56,15 +64,32 @@ namespace api.Controllers
 
         }
         [HttpDelete]
-        [Route("{id}")]
-        public async Task <IActionResult> Delete([FromRoute] int id){
-            var attractionModel = await _attractionRepo.DeleteAsync(id);
-            if(attractionModel == null){
-                return NotFound();
-            }
-            
-            return NoContent();
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id){
+         if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+    // Find the attraction and include its reviews
+         var attraction = await _context.TouristAttractions
+        .Include(ta => ta.Reviews)
+        .FirstOrDefaultAsync(ta => ta.Id == id);
+
+        if (attraction == null)
+        {
+        return NotFound();
         }
+
+    // Remove associated reviews
+    _context.Reviews.RemoveRange(attraction.Reviews);
+
+    // Remove the attraction
+    _context.TouristAttractions.Remove(attraction);
+
+    // Save changes
+    await _context.SaveChangesAsync();
+
+    return NoContent();
+}
+
 
     }
 }
