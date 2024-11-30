@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Tourist_Attraction;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -35,9 +36,13 @@ namespace api.Repositories
             return attractionModel;
         }
 
-        public async Task<List<TouristAttraction>> GetAllAsync()
+        public async Task<List<TouristAttraction>> GetAllAsync(QueryObject query)
         {
-            return await _context.TouristAttractions.Include(c => c.Reviews).ToListAsync();
+            var attractions = _context.TouristAttractions.Include(c => c.Reviews).AsQueryable();
+            if(!string.IsNullOrWhiteSpace(query.Name)){
+                attractions = attractions.Where(s => s.Name.Contains(query.Name));
+            }
+            return await attractions.ToListAsync();
         }
 
         public async Task<TouristAttraction?> GetAsyncById(int id)

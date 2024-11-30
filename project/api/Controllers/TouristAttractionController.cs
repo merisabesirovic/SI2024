@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Tourist_Attraction;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,10 @@ namespace api.Controllers
             _attractionRepo = attractionRepo;
         }
         [HttpGet]
-        public async Task <IActionResult> GetAll(){
+        public async Task <IActionResult> GetAll([FromQuery] QueryObject query){
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var tourist_attractions = await _attractionRepo.GetAllAsync();
+            var tourist_attractions = await _attractionRepo.GetAllAsync(query);
             var tourist_attractionDto = tourist_attractions.Select(s=>s.ToAttractionDto());
             return Ok(tourist_attractions);
         }
