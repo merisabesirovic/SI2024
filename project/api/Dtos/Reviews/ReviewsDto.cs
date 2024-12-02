@@ -12,5 +12,5 @@ namespace api.Dtos.Reviews
     public string Comment { get; set; } = string.Empty;
     public DateTime CreatedOn {get; set;} = DateTime.Now;
     public int? TouristAttractionId {get; set;} 
-    }
+    } 
 }

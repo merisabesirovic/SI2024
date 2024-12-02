@@ -42,7 +42,8 @@ namespace api.Repositories
             if(!string.IsNullOrWhiteSpace(query.Name)){
                 attractions = attractions.Where(s => s.Name.Contains(query.Name));
             }
-            return await attractions.ToListAsync();
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            return await attractions.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
         public async Task<TouristAttraction?> GetAsyncById(int id)

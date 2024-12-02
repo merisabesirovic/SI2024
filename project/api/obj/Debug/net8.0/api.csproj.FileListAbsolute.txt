@@ -289,3 +289,10 @@ C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.AspNetCore.Js
 C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+C:\Users\J\Desktop\NP.click\project\api\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
