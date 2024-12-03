@@ -6,6 +6,7 @@ using api.Dtos.Reviews;
 using api.Interfaces;
 using api.Mappers;
 using api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -22,6 +23,7 @@ namespace api.Controllers
             _attractionInterface = attractionInterface;
         }
         [HttpGet]
+        
         public async Task<IActionResult> GetAll(){
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -42,6 +44,7 @@ namespace api.Controllers
             return Ok(review.ToReviewDto());
         }
         [HttpPost("{attractionId:int}")]
+        [Authorize]
         public async Task <IActionResult> Create([FromRoute]int attractionId, CreateReviewDto reviewDto){
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -14,6 +14,8 @@ namespace api.Models
          public string Photos { get; set; } = string.Empty;
          public string Category{ get; set; } = string.Empty;
         public List<Review> Reviews { get; set; } = new List<Review>();
+        public List<Portfolio> Portfolios {get; set;} = new List<Portfolio>();
+
 
     }
 

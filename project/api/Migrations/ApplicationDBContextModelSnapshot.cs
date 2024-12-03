@@ -51,19 +51,19 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6c8fd9f3-8a09-4da8-8c0a-937e190740e3",
+                            Id = "76658acd-d4f9-4b5f-986b-e992860ff8ea",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "aeba09d6-2f0c-40ba-98ab-68637b8fcd0f",
+                            Id = "b4d9ab6c-3707-4409-b338-a0579f0f5356",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "be80114d-3763-442c-87c3-36752b24d113",
+                            Id = "1a72cb47-ac91-40fd-8d23-ef0067aeb59f",
                             Name = "Local_company",
                             NormalizedName = "LOCAL_COMPANY"
                         });
@@ -173,6 +173,21 @@ namespace api.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Portfolio", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TouristAttractionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "TouristAttractionId");
+
+                    b.HasIndex("TouristAttractionId");
+
+                    b.ToTable("Portfolios");
                 });
 
             modelBuilder.Entity("api.Models.Review", b =>
@@ -352,6 +367,25 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("api.Models.Portfolio", b =>
+                {
+                    b.HasOne("api.Models.TouristAttraction", "TouristAttraction")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("TouristAttractionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TouristAttraction");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("api.Models.Review", b =>
                 {
                     b.HasOne("api.Models.TouristAttraction", "TouristAttraction")
@@ -363,7 +397,14 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.TouristAttraction", b =>
                 {
+                    b.Navigation("Portfolios");
+
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("api.Models.User", b =>
+                {
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

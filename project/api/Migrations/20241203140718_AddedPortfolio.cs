@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class AddedPortfolio : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,6 +176,30 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Portfolios",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TouristAttractionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Portfolios", x => new { x.UserId, x.TouristAttractionId });
+                    table.ForeignKey(
+                        name: "FK_Portfolios_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Portfolios_TouristAttractions_TouristAttractionId",
+                        column: x => x.TouristAttractionId,
+                        principalTable: "TouristAttractions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
@@ -192,6 +218,16 @@ namespace api.Migrations
                         column: x => x.TouristAttractionId,
                         principalTable: "TouristAttractions",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "1a72cb47-ac91-40fd-8d23-ef0067aeb59f", null, "Local_company", "LOCAL_COMPANY" },
+                    { "76658acd-d4f9-4b5f-986b-e992860ff8ea", null, "Admin", "ADMIN" },
+                    { "b4d9ab6c-3707-4409-b338-a0579f0f5356", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -234,6 +270,11 @@ namespace api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Portfolios_TouristAttractionId",
+                table: "Portfolios",
+                column: "TouristAttractionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_TouristAttractionId",
                 table: "Reviews",
                 column: "TouristAttractionId");
@@ -256,6 +297,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Portfolios");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
