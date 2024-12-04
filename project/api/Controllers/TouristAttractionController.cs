@@ -30,8 +30,8 @@ namespace api.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
             var tourist_attractions = await _attractionRepo.GetAllAsync(query);
-            var tourist_attractionDto = tourist_attractions.Select(s=>s.ToAttractionDto());
-            return Ok(tourist_attractions);
+            var tourist_attractionDto = tourist_attractions.Select(s=>s.ToAttractionDto()).ToList();
+            return Ok(tourist_attractionDto);
         }
         [HttpGet("{id:int}")]
         public async Task <IActionResult> GetById([FromRoute] int id){
@@ -43,7 +43,7 @@ namespace api.Controllers
             }
             else 
             {
-                return Ok(tourist_attraction);
+                return Ok(tourist_attraction.ToAttractionDto());
             }
         }
         [HttpPost]

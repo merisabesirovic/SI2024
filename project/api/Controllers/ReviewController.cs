@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Reviews;
+using api.Extensions;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using api.Models;
 using api.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -17,18 +21,20 @@ namespace api.Controllers
     {
         private readonly IReviewRepository _reviewRepo;
         private readonly ITouristAttractionInterface _attractionInterface;
-        public ReviewController(IReviewRepository reviewRepo, ITouristAttractionInterface attractionInterface)
+        private readonly UserManager<User> _usermanager;
+        public ReviewController(IReviewRepository reviewRepo, ITouristAttractionInterface attractionInterface, UserManager<User> userManager)
         {
             _reviewRepo = reviewRepo;
             _attractionInterface = attractionInterface;
+            _usermanager = userManager;
         }
         [HttpGet]
-        
-        public async Task<IActionResult> GetAll(){
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery]ReviewQueryObject queryObject){
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var reviews = await _reviewRepo.GetAllAsync();
-            var reviewsDto = reviews.Select(s => s.ToReviewDto());
+            var reviews = await _reviewRepo.GetAllAsync(queryObject);
+            var reviewsDto = reviews.Select(s => s.ToReviewDto()).ToList();
             return Ok(reviewsDto);
         }
 
@@ -51,8 +57,12 @@ namespace api.Controllers
             if(!await _attractionInterface.TouristAttractionExists(attractionId)){
                 return BadRequest("Attraction does not exist");
             }
+            var username = User.GetUsername();
+            var appUser = await _usermanager.FindByNameAsync(username);
+
 
             var reviewModel = reviewDto.ToReviewFromCreate(attractionId);
+            reviewModel.UserId = appUser.Id;
             await _reviewRepo.CreateAsync(reviewModel);
             return CreatedAtAction(nameof(GetById), new{ id = reviewModel.Id}, reviewModel.ToReviewDto());
         }

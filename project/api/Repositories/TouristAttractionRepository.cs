@@ -38,7 +38,7 @@ namespace api.Repositories
 
         public async Task<List<TouristAttraction>> GetAllAsync(QueryObject query)
         {
-            var attractions = _context.TouristAttractions.Include(c => c.Reviews).AsQueryable();
+            var attractions = _context.TouristAttractions.Include(c => c.Reviews).ThenInclude(a => a.User).AsQueryable();
             if(!string.IsNullOrWhiteSpace(query.Name)){
                 attractions = attractions.Where(s => s.Name.Contains(query.Name));
             }

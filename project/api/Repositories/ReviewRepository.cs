@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,14 +37,21 @@ namespace api.Repositories
             return reviewModel;
         }
 
-        public async Task<List<Review>> GetAllAsync()
+        public async Task<List<Review>> GetAllAsync(ReviewQueryObject queryObject)
         {
-            return await _context.Reviews.ToListAsync();
+            var reviews =  _context.Reviews.Include(a => a.User).AsQueryable();
+            if(!string.IsNullOrWhiteSpace(queryObject.Name)){
+                reviews = reviews.Where(s => s.TouristAttraction.Name == queryObject.Name);
+            }
+            if(queryObject.IsDescening == true){
+                reviews = reviews.OrderByDescending(c=>c.CreatedOn);
+            }
+            return await reviews.ToListAsync();
         }
 
         public async Task<Review?> GetByIdAsync(int id)
         {
-            return await _context.Reviews.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Reviews.Include(a => a.User).FirstOrDefaultAsync(c => c.Id == id);
         }
         
     }

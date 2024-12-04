@@ -15,7 +15,8 @@ namespace api.Mappers
                 Rating = reviewModel.Rating,
                 Comment = reviewModel.Comment,
                 CreatedOn = reviewModel.CreatedOn,
-                TouristAttractionId = reviewModel.TouristAttractionId
+                TouristAttractionId = reviewModel.TouristAttractionId,
+                CreatedBy = reviewModel.User.UserName
             };
         }
 
@@ -27,6 +28,7 @@ namespace api.Mappers
         Comment = reviewDto.Comment,
         TouristAttractionId = touristAttractionId, // Only set the ID
         TouristAttraction = null // Ensure the navigation property is null
+
     };
 }
 
