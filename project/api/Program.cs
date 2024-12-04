@@ -90,6 +90,8 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<ITouristAttractionInterface, TouristAttractionRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+
 
 
 var app = builder.Build();

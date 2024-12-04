@@ -16,6 +16,7 @@ namespace api.Interfaces
         Task<TouristAttraction?> UpdateAsync(int id, UpdateAttractionRequestDto attractionRequestDto);
         Task<TouristAttraction?> DeleteAsync(int id);
         Task<bool>TouristAttractionExists(int id);
+        Task<TouristAttraction?> GetByNameAsync(string name);
 
         
     }
