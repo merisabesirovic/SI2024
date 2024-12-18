@@ -1,0 +1,57 @@
+.card {
+  width: 300px;
+  height: 400px;
+  border-radius: 8px;
+  padding: 20px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  text-align: left;
+  font-family: "Figtree", sans-serif;
+}
+
+.card-title {
+  font-size: 1.7rem;
+  font-weight: 500;
+  margin: 10px 0;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.card-icon {
+  padding: 20px;
+}
+.card-subtitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "Figtree", sans-serif;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  margin: 30px 0px;
+
+  line-height: 1.4;
+  font-family: "Figtree", sans-serif;
+}
+
+.card-button {
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  font-family: "Figtree", sans-serif;
+}
+
+.card-button:hover {
+  background-color: #e04e4e;
+}

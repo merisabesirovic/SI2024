@@ -1,0 +1,44 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.left-part {
+  flex: 1;
+  padding: 20px;
+  text-align: left;
+}
+
+.left-part h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  font-family: "IBM Plex Mono", monospace;
+  color: #3f3f41;
+}
+
+.left-part p {
+  margin: 10px 0;
+  font-size: 1.1rem;
+  font-family: "Figtree", sans-serif;
+  padding: 20px 0;
+  color: #828080;
+  font-size: 16px;
+}
+
+.right-part {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-part img {
+  width: 100%; /* Responsive width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure image fits properly */
+  clip-path: circle(
+    72.5% at 72% 93%
+  ); /* Creates a half-circle cut on the left side */
+}

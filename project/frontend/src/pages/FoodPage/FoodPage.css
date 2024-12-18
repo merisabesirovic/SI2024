@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.foodpage-wrapper {
+  display: grid;
+  grid-template-columns: 0.7fr 1fr; /* Two columns */
+  grid-template-rows: auto auto; /* Allow rows to adjust automatically */
+  height: auto; /* Let the container grow based on content */
+  width: 100%; /* Full viewport width */
+  margin: 0;
+  padding: 0;
+  gap: 0; /* No gap between the grid items */
+}
+
+.block {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Vertically center content */
+  text-align: start;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 200px; /* Prevent collapsing for small screens */
+}
+
+.block img {
+  width: 100%; /* Ensures the image fills the grid cell */
+  height: 100%; /* Ensures the image fills the grid cell */
+  object-fit: cover; /* Ensures the image scales proportionally and crops if needed */
+}
+
+.block-1 {
+  height: 400px;
+  background-color: #bc3937;
+  width: 100%;
+}
+
+.block-2 {
+  background-color: #16725e;
+  padding: 30px;
+  font-size: 14px;
+  color: #9ec8b8;
+}
+
+.block-3 {
+  background-color: #bc3937;
+  padding: 30px;
+  font-size: 14px;
+  color: #efc2c0;
+}
+
+.block-3 p,
+.block-2 p {
+  padding: 20px;
+}
+
+.block-4 {
+  height: 500px;
+  width: 100%;
+  background-color: #16725e;
+}
+
+/* Media Query for Tablets */
+@media (max-width: 1024px) {
+  .foodpage-wrapper {
+    grid-template-columns: 1fr; /* Single column layout */
+    grid-template-rows: auto auto auto auto; /* Stack the blocks vertically */
+    height: auto; /* Adjust height based on content */
+  }
+
+  .block-1,
+  .block-4 {
+    height: 300px; /* Adjust height for smaller screens */
+  }
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+  .foodpage-wrapper {
+    grid-template-columns: 1fr; /* Single column layout for mobile */
+    grid-template-rows: auto auto auto auto; /* Stack blocks vertically */
+    height: auto; /* Adjust height based on content */
+  }
+
+  .block-1,
+  .block-4 {
+    height: 250px; /* Smaller image height for mobile */
+  }
+
+  .block {
+    font-size: 18px; /* Adjust font size for mobile */
+  }
+}

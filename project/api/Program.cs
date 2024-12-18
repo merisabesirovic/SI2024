@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Amazon.S3;
 using api.Data;
 using api.Interfaces;
 using api.Models;
@@ -53,7 +54,13 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
-});
+}); 
+
+
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
+
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

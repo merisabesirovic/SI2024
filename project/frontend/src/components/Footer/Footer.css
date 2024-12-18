@@ -1,0 +1,28 @@
+.footer {
+  background-color: #003333;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 260px;
+  color: #aeb3ae;
+}
+
+.logo-section img {
+  height: 90px;
+}
+
+.footer p {
+  padding: 10px;
+  cursor: pointer; /* Default pointer for all p elements */
+}
+
+/* Prevent pointer cursor and hover effect for p inside .logo-section */
+.logo-section p {
+  cursor: default !important; /* Prevent pointer cursor */
+  color: inherit; /* Prevent color change on hover */
+}
+
+/* Hover effect for other p elements */
+.footer p:hover {
+  color: white;
+}

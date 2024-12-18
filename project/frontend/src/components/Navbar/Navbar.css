@@ -1,0 +1,109 @@
+@import url(../../fonts/fonts.css);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Figtree", sans-serif;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+  width: 100%;
+  z-index: 1000;
+  position: sticky; /* Ensures the navbar stays at the top
+  /* top: 0;
+  left: 0;  */
+  background: linear-gradient(
+    to bottom,
+    rgba(228, 59, 57, 0.35),
+    /* Stronger red at the top */ rgba(228, 59, 57, 0)
+      /* Fully transparent at the bottom */
+  );
+  backdrop-filter: blur(10px); /* Adds blur for the glass effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+
+  transition: background 0.3s ease-in-out;
+}
+
+.navbar-logo img {
+  height: 80px;
+  cursor: pointer;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.navbar-links button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: white; /* Neutralna siva boja */
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-links button:hover {
+  color: #e43b39; /* Plava za hover efekat */
+}
+
+/* Hamburger menu */
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.navbar-hamburger span {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+  .navbar-links.open button {
+    display: flex;
+    color: #e43b39;
+  }
+
+  .navbar-hamburger {
+    display: flex;
+  }
+}
+
+/* Animation for opening menu */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

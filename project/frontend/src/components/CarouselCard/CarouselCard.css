@@ -1,0 +1,28 @@
+.carousel-card {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding: 20px;
+  height: 100%;
+}
+.carousel-card img {
+  width: 100%; /* Image spans the width of the card */
+  height: 290px; /* Fixed height for all images */
+  object-fit: cover; /* Ensures the image maintains aspect ratio */
+  border-radius: 8px;
+}
+.carousel-card h3 {
+  font-family: "IBM Plex Mono", monospace;
+  color: white;
+  padding-top: 10px;
+}
+.carousel-card h4 {
+  border-bottom: solid 1px white;
+  padding: 10px;
+}
+.carousel-card p {
+  color: #d6dcd5;
+  text-align: justify;
+  padding: 7px;
+  font-size: 14px;
+}

@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+body {
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.Content {
+  margin-top: 50px; /* Same as navbar height */
+  flex: 1;
+}
+.Navbar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 60px;
+}
