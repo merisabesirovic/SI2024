@@ -10,9 +10,10 @@ namespace api.Models
         public int Id {get; set;}
         public string Name {get; set;} = string.Empty;
         public string Description {get; set;} = string.Empty;
-        public string Location {get; set;} = string.Empty;
-         public string Photos { get; set; } = string.Empty;
-         public string Category{ get; set; } = string.Empty;
+        public string Longitude {get; set;} = string.Empty;
+        public string Latitude {get; set;} = string.Empty;
+        public string Photos { get; set; } = string.Empty;
+        public string Category{ get; set; } = string.Empty;
         public List<Review> Reviews { get; set; } = new List<Review>();
         public List<Portfolio> Portfolios {get; set;} = new List<Portfolio>();
 

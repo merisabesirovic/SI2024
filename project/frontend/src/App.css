@@ -47,7 +47,7 @@ body {
 }
 
 .Content {
-  margin-top: 50px; /* Same as navbar height */
+  margin-top: 60px;
   flex: 1;
 }
 .Navbar {

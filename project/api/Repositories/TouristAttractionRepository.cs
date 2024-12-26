@@ -39,8 +39,8 @@ namespace api.Repositories
         public async Task<List<TouristAttraction>> GetAllAsync(QueryObject query)
         {
             var attractions = _context.TouristAttractions.Include(c => c.Reviews).ThenInclude(a => a.User).AsQueryable();
-            if(!string.IsNullOrWhiteSpace(query.Name)){
-                attractions = attractions.Where(s => s.Name.Contains(query.Name));
+            if(!string.IsNullOrWhiteSpace(query.Category)){
+                attractions = attractions.Where(s => s.Category.Contains(query.Category));
             }
             var skipNumber = (query.PageNumber - 1) * query.PageSize;
             return await attractions.Skip(skipNumber).Take(query.PageSize).ToListAsync();
@@ -69,8 +69,9 @@ namespace api.Repositories
             }
             existingAttraction.Name = attractionRequestDto.Name;
             existingAttraction.Description = attractionRequestDto.Description;
-            existingAttraction.Location = attractionRequestDto.Location;
-            existingAttraction.Photos = attractionRequestDto.Photos;
+            existingAttraction.Longitude = attractionRequestDto.Longitude;
+            existingAttraction.Latitude = attractionRequestDto.Latitude;
+
             existingAttraction.Category = attractionRequestDto.Category;
 
             await _context.SaveChangesAsync();

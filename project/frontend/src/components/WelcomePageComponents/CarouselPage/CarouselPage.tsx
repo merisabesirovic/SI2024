@@ -2,17 +2,16 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "./CarouselPage.css";
-import amiraginhan from "../../assets/carousel_images/amiragin-han-final2.png";
-import arap from "../../assets/carousel_images/Arap-dzamija-final.png";
-import bedem from "../../assets/carousel_images/bedem-final.png";
-import crkva_sv_Nikole from "../../assets/carousel_images/crkva-sv-Nikole.png";
-import djurdjevi from "../../assets/carousel_images/djurdjevi-2.png";
-import hamam from "../../assets/carousel_images/hamam-final.png";
-import mitropolija from "../../assets/carousel_images/mitropolija.png";
-import petrova_crkva from "../../assets/carousel_images/petrova-crkva-final.png";
-import sopocani from "../../assets/carousel_images/sopocani-final.png";
-
-import CarouselCard from "../../components/CarouselCard/CarouselCard";
+import amiraginhan from "../../../assets/carousel_images/amiragin-han-final2.png";
+import arap from "../../../assets/carousel_images/Arap-dzamija-final.png";
+import bedem from "../../../assets/carousel_images/bedem-final.png";
+import crkva_sv_Nikole from "../../../assets/carousel_images/crkva-sv-Nikole.png";
+import djurdjevi from "../../../assets/carousel_images/djurdjevi-2.png";
+import hamam from "../../../assets/carousel_images/hamam-final.png";
+import mitropolija from "../../../assets/carousel_images/mitropolija.png";
+import petrova_crkva from "../../../assets/carousel_images/petrova-crkva-final.png";
+import sopocani from "../../../assets/carousel_images/sopocani-final.png";
+import CarouselCard from "../../CarouselCard/CarouselCard";
 
 const responsive = {
   superLargeDesktop: {

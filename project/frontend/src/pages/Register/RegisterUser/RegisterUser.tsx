@@ -1,31 +1,128 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import BASE_URL from "../../../config/api";
 import styled from "styled-components";
-
-type Props = {};
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
 
 const RegisterUser = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [enabled, setEnabled] = useState(true);
+  const [message] = useState(
+    "Lozinka mora imati jedno veliko slovo, 8 karaktera, jedan broj i jedan specijalni karakter"
+  );
+  const [warning, setWarning] = useState("");
+  const [userInput, setUserInput] = useState({
+    username: "",
+    email: "",
+    password: "",
+    roles: ["User"],
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const isPasswordValid = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+    return passwordRegex.test(password);
+  };
+
+  const isEmailValid = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    const { username, email, password } = userInput;
+    if (username && isEmailValid(email) && isPasswordValid(password)) {
+      setEnabled(false);
+    } else {
+      setEnabled(true);
+    }
+  }, [userInput]);
+
+  const handleClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    RegisterUser(userInput);
+  };
+
+  async function RegisterUser(data: object) {
+    try {
+      setIsLoading(true);
+      console.log("Sending data to API:", data);
+      const response = await axios.post(`${BASE_URL}/account/register`, data);
+      console.log("API Response:", response.data);
+      toast.success("User registered successfully!");
+      navigate("/confirm_email");
+    } catch (error: any) {
+      console.error("Error during registration:", error.response || error);
+      if (error.response && error.response.data) {
+        toast.error(`Error: ${error.response.data.message}`);
+      } else {
+        toast.error("Unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <StyledWrapper>
-      <form className="form">
+      {isLoading && <Loader />}
+      <form className="form" style={{ display: isLoading ? "none" : "block" }}>
         <p className="form-title">Registrujte se</p>
         <div className="input-container">
-          <input placeholder="Korisničko ime" type="text" required />
+          <input
+            placeholder="Korisničko ime"
+            type="text"
+            required
+            value={userInput.username}
+            onChange={(e) =>
+              setUserInput((prev) => ({ ...prev, username: e.target.value }))
+            }
+          />
         </div>
+
         <div className="input-container">
-          <input placeholder="Unesite emai" type="email" required />
+          <input
+            placeholder="Unesite email"
+            type="email"
+            required
+            value={userInput.email}
+            onChange={(e) =>
+              setUserInput((prev) => ({ ...prev, email: e.target.value }))
+            }
+            onBlur={() => {
+              if (!isEmailValid(userInput.email)) {
+                toast.error("Unesite važeći email!");
+              }
+            }}
+          />
         </div>
+
         <div className="input-container">
           <input
             placeholder="Unesite lozinku"
             type={showPassword ? "text" : "password"}
             required
+            value={userInput.password}
+            onChange={(e) =>
+              setUserInput((prev) => ({ ...prev, password: e.target.value }))
+            }
+            onFocus={() =>
+              setWarning(
+                "Lozinka mora imati jedno veliko slovo, 8 karaktera, jedan broj i jedan specijalni karakter."
+              )
+            }
+            onBlur={() => {
+              setWarning("");
+              if (!isPasswordValid(userInput.password)) {
+                toast.error(message);
+              }
+            }}
           />
           <span onClick={togglePasswordVisibility}>
             <svg
@@ -49,9 +146,23 @@ const RegisterUser = () => {
             </svg>
           </span>
         </div>
-        <button className="submit" type="submit">
+        {warning ? (
+          <p style={{ color: "gray", fontSize: "11px", padding: "10px" }}>
+            {warning}
+          </p>
+        ) : (
+          ""
+        )}
+
+        <button
+          className="submit"
+          type="submit"
+          onClick={handleClick}
+          disabled={enabled}
+        >
           Submit
         </button>
+
         <p className="signup-link">
           Već imate nalog? <a href="/login">Ulogujte se ovde</a>
         </p>
@@ -60,6 +171,12 @@ const RegisterUser = () => {
           <a href="/register_company">Registrujte ga ovde</a>
         </p>
       </form>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar
+      />
     </StyledWrapper>
   );
 };

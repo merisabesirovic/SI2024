@@ -1,0 +1,9 @@
+.attractions_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 40px;
+  margin-top: 50px;
+}

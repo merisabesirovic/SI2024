@@ -6,3 +6,8 @@
   margin: 20px;
   flex-wrap: wrap;
 }
+.main-title {
+  color: #3f3f41;
+  padding: 30px;
+  margin: 10px;
+}

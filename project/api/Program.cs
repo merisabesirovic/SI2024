@@ -6,6 +6,7 @@ using api.Models;
 using api.Repositories;
 using api.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -57,9 +58,15 @@ builder.Services.AddSwaggerGen(option =>
 }); 
 
 
+builder.Services.AddTransient<EmailService>();
 
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // Limit file size to 10 MB
+});
+
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -76,7 +83,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>{
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
 })
-.AddEntityFrameworkStores<ApplicationDBContext>();
+.AddEntityFrameworkStores<ApplicationDBContext>()
+.AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = 
     options.DefaultChallengeScheme = 

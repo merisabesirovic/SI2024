@@ -1,22 +1,72 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import BASE_URL from "../../config/api";
+
 const Login = () => {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  const handleClick = () => {
-    navigate("/register_user");
+
+  const loginUser = async (data: any) => {
+    try {
+      console.log(data);
+      const response = await axios.post(`${BASE_URL}/account/login`, data);
+      console.log(data);
+      console.log(response.data);
+
+      const token = response.data.token;
+      const id = response.data.userId;
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      localStorage.setItem("token", token);
+      localStorage.setItem("id", id);
+
+      const user = response.data.roles[0];
+      localStorage.setItem("role", user);
+      user === "Admin"
+        ? navigate("/admin_home")
+        : user === "User"
+        ? navigate("/user_home")
+        : navigate("/local_company_home");
+      console.log(user);
+    } catch (err: any) {
+      console.log(data);
+      toast.error(err.response.data);
+      localStorage.removeItem("token");
+      setError(err.response.data);
+      console.log(err.response.data);
+    }
+  };
+
+  const handleClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    loginUser({ UserName: userName, Password: password });
+  };
+  const handleNavigate = () => {
+    navigate("/forgot_password");
   };
 
   return (
     <StyledWrapper>
-      <form className="form">
+      <form className="form" onSubmit={handleClick}>
         <p className="form-title">Ulogujte se</p>
         <div className="input-container">
-          <input placeholder="Unesite email" type="email" />
+          <input
+            placeholder="Unesite korisničko ime"
+            type="text"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
           <span>
             <svg
               stroke="currentColor"
@@ -37,6 +87,8 @@ const Login = () => {
           <input
             placeholder="Unesite lozinku"
             type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <span onClick={togglePasswordVisibility}>
             <svg
@@ -60,13 +112,21 @@ const Login = () => {
             </svg>
           </span>
         </div>
-        <button className="submit" type="submit">
-          Sign in
+        <button className="submit" type="submit" onClick={handleClick}>
+          Submit
         </button>
-        <p className="signup-link" onClick={handleClick}>
+        <p className="signup-link" onClick={() => navigate("/register_user")}>
           Nemate nalog? <span>Kreirajte ga ovde.</span>
         </p>
+        <p className="signup-link" onClick={handleNavigate}>
+          Zaboravili ste lozinku?
+        </p>
       </form>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar
+      />
     </StyledWrapper>
   );
 };
@@ -171,7 +231,6 @@ const StyledWrapper = styled.div`
     color: #e43b39;
   }
 
-  /* Responsive design */
   @media (max-width: 480px) {
     .form {
       padding: 1rem;

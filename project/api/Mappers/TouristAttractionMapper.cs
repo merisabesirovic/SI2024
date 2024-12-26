@@ -14,7 +14,8 @@ namespace api.Mappers
                     Id = touristAttractionModel.Id,
                     Name = touristAttractionModel.Name,
                     Description = touristAttractionModel.Description,
-                    Location = touristAttractionModel.Location,
+                    Longitude = touristAttractionModel.Longitude,
+                    Latitude = touristAttractionModel.Latitude,
                     Photos = touristAttractionModel.Photos,
                     Category = touristAttractionModel.Category,
                     Reviews = touristAttractionModel.Reviews.Select(r => r.ToReviewDto()).ToList(),
@@ -24,8 +25,9 @@ namespace api.Mappers
             return new TouristAttraction{
                 Name = touristAttractionDto.Name,
                 Description = touristAttractionDto.Description,
-                Location = touristAttractionDto.Location,
-                Photos = touristAttractionDto.Photos,
+               Longitude = touristAttractionDto.Longitude,
+                    Latitude = touristAttractionDto.Latitude,
+        
                 Category = touristAttractionDto.Category
             };
         }

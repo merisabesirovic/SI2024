@@ -16,7 +16,7 @@ namespace api.Mappers
                 Comment = reviewModel.Comment,
                 CreatedOn = reviewModel.CreatedOn,
                 TouristAttractionId = reviewModel.TouristAttractionId,
-                CreatedBy = reviewModel.User.UserName
+                CreatedBy = reviewModel.User?.UserName ?? "Anonymous"
             };
         }
 

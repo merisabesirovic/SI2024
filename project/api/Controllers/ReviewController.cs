@@ -29,7 +29,7 @@ namespace api.Controllers
             _usermanager = userManager;
         }
         [HttpGet]
-        [Authorize]
+    
         public async Task<IActionResult> GetAll([FromQuery]ReviewQueryObject queryObject){
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);

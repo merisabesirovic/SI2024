@@ -43,7 +43,8 @@ namespace api.Repositories
                 Name = attraction.TouristAttraction.Name,
                 Description = attraction.TouristAttraction.Description,
                 Category = attraction.TouristAttraction.Category,
-                Location = attraction.TouristAttraction.Location,
+                Latitude = attraction.TouristAttraction.Latitude,
+                Longitude = attraction.TouristAttraction.Longitude,
                 Photos = attraction.TouristAttraction.Photos
             }).ToListAsync();
         }

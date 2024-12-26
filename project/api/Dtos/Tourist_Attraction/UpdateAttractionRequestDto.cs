@@ -17,10 +17,10 @@ namespace api.Dtos.Tourist_Attraction
         public string Description {get; set;} = string.Empty;
         [Required]
         [MaxLength(50, ErrorMessage = "Location must be less than 50 characters")]
-        public string Location {get; set;} = string.Empty;
-         [Required]
-        public string Photos { get; set; } = string.Empty;
-         [Required]
+        public string Longitude {get; set;} = string.Empty;
+        [Required]
+        public string Latitude {get;set;} = string.Empty;
+         
         public string Category { get; set; } = string.Empty;
     }
 }

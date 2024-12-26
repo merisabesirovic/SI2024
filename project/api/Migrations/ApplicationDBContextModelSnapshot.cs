@@ -51,19 +51,19 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "713d2310-3f3e-48ce-b554-6fd6f2126aed",
+                            Id = "68067305-6b1f-454b-bb04-33f2881a75cc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "197d6304-3f2a-499c-ab9d-bd50b18a61ee",
+                            Id = "a4ed2caf-c889-45e8-91d9-94e657fc7768",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "7c667ba8-fa13-4bb0-a7e3-38bc93b24a28",
+                            Id = "82fae153-a351-49db-8724-3ad709296dea",
                             Name = "Local_company",
                             NormalizedName = "LOCAL_COMPANY"
                         });
@@ -240,7 +240,11 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Longitude")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -274,6 +278,9 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
