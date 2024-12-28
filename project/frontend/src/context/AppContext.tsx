@@ -1,31 +1,53 @@
-import React, { createContext, ReactNode, useState } from "react";
-interface ContextProviderProps {
-  children: ReactNode;
-}
-const AppContext = createContext<{
+import React, { createContext, useState, ReactNode, useEffect } from "react";
+
+interface AppContextType {
   token: string | null;
-  setToken: React.Dispatch<React.SetStateAction<string | null>>;
   userId: string | null;
-  setUserId: React.Dispatch<React.SetStateAction<string | null>>;
-}>({
+  userRole: string | null;
+  setToken: (token: string | null) => void;
+  setUserId: (id: string | null) => void;
+  setUserRole: (role: string | null) => void;
+}
+
+const AppContext = createContext<AppContextType>({
   token: null,
-  setToken: () => {},
   userId: null,
+  userRole: null,
+  setToken: () => {},
   setUserId: () => {},
+  setUserRole: () => {},
 });
 
-function ContextProvider({ children }: ContextProviderProps) {
-  const [token, setToken] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
+  const [userId, setUserId] = useState<string | null>(
+    localStorage.getItem("id")
+  );
+  const [userRole, setUserRole] = useState<string | null>(
+    localStorage.getItem("role")
+  );
 
-  const values = {
-    token,
-    setToken,
-    userId,
-    setUserId,
-  };
+  // Update localStorage whenever the context state changes
+  useEffect(() => {
+    if (token) localStorage.setItem("token", token);
+    else localStorage.removeItem("token");
 
-  return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
-}
+    if (userId) localStorage.setItem("id", userId);
+    else localStorage.removeItem("id");
 
-export { AppContext, ContextProvider };
+    if (userRole) localStorage.setItem("role", userRole);
+    else localStorage.removeItem("role");
+  }, [token, userId, userRole]);
+
+  return (
+    <AppContext.Provider
+      value={{ token, userId, userRole, setToken, setUserId, setUserRole }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export { AppContext, AppProvider };

@@ -4,6 +4,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Figtree", sans-serif;
+  text-decoration: none;
 }
 .navbar {
   display: flex;
@@ -11,17 +12,13 @@
   align-items: center;
   padding: 5px 20px;
   width: 100%;
-  z-index: 1000;
-  position: sticky; /* Ensures the navbar stays at the top
-  /* top: 0;
-  left: 0;  */
-  background: linear-gradient(to bottom, rgba(251, 250, 250, 0.35));
-  /* background-color: #e43b39; */
-
-  backdrop-filter: blur(10px); /* Adds blur for the glass effect */
-  -webkit-backdrop-filter: blur(10px); /* For Safari */
-  transition: background 0.3s ease-in-out;
+  z-index: 10000;
+  position: sticky;
   background-color: whitesmoke;
+}
+.button {
+  display: flex;
+  align-items: center;
 }
 
 .navbar-logo img {

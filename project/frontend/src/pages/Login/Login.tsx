@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import BASE_URL from "../../config/api";
+import { AppContext } from "../../context/AppContext";
 
 const Login = () => {
   const [userName, setUserName] = useState("");
@@ -12,7 +13,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const { setToken, setUserId, setUserRole } = useContext(AppContext);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -23,15 +24,12 @@ const Login = () => {
       const response = await axios.post(`${BASE_URL}/account/login`, data);
       console.log(data);
       console.log(response.data);
-
       const token = response.data.token;
       const id = response.data.userId;
-
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const user = response.data.roles[0];
       localStorage.setItem("token", token);
       localStorage.setItem("id", id);
-
-      const user = response.data.roles[0];
       localStorage.setItem("role", user);
       user === "Admin"
         ? navigate("/admin_home")
@@ -39,6 +37,9 @@ const Login = () => {
         ? navigate("/user_home")
         : navigate("/local_company_home");
       console.log(user);
+      setToken(token);
+      setUserId(id);
+      setUserRole(user);
     } catch (err: any) {
       console.log(data);
       toast.error(err.response.data);

@@ -7,3 +7,12 @@
   margin: 40px;
   margin-top: 50px;
 }
+.loader-container {
+  height: 80vh;
+}
+.content {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -7,6 +7,8 @@ import "./AttractionsDetailsPage.css";
 import { motion } from "framer-motion";
 import { FaMapLocationDot } from "react-icons/fa6";
 import Reviews from "../Reviews/Reviews";
+import Loader from "../../../components/Loader/Loader";
+import AddToFavorites from "../AddToFavorites/AddToFavorites";
 
 type Attraction = {
   id: string;
@@ -41,17 +43,20 @@ const AttractionDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [attraction, setAttraction] = useState<Attraction | null>(null);
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch tourist attraction details
   useEffect(() => {
     const fetchAttractionDetails = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(
           `http://localhost:5241/api/tourist_attractions/${id}`
         );
         setAttraction(response.data);
       } catch (error) {
         console.error("Error fetching attraction details:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -71,8 +76,16 @@ const AttractionDetailsPage = () => {
     );
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="loader-container">
+        <Loader />
+      </div>
+    );
+  }
+
   if (!attraction) {
-    return <div>Loading...</div>;
+    return <div>Nema dodatnih informacija o ovoj stranici.</div>;
   }
 
   const photosArray = attraction.photos.split(",");
@@ -84,7 +97,6 @@ const AttractionDetailsPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Background Section */}
       <div
         className="background-image"
         style={{
@@ -168,6 +180,7 @@ const AttractionDetailsPage = () => {
       </div>
 
       <Reviews attractionId={id!} />
+      <AddToFavorites attractionName={attraction.name} />
     </motion.div>
   );
 };

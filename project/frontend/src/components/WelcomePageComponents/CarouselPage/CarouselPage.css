@@ -7,3 +7,6 @@
 .carousel-page-wrapper h1 {
   padding: 30px;
 }
+.react-multi-carousel-arrow {
+  z-index: 999; /* Ensures arrows are below the navbar */
+}

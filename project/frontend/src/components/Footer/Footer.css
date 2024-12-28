@@ -5,6 +5,7 @@
   align-items: center;
   height: 260px;
   color: #aeb3ae;
+  flex-wrap: wrap;
 }
 
 .logo-section img {
@@ -13,16 +14,14 @@
 
 .footer p {
   padding: 10px;
-  cursor: pointer; /* Default pointer for all p elements */
+  cursor: pointer;
 }
 
-/* Prevent pointer cursor and hover effect for p inside .logo-section */
 .logo-section p {
   cursor: default !important; /* Prevent pointer cursor */
-  color: inherit; /* Prevent color change on hover */
+  color: inherit;
 }
 
-/* Hover effect for other p elements */
 .footer p:hover {
   color: white;
 }

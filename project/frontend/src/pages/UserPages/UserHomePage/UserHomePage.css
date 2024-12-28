@@ -1,0 +1,20 @@
+.userHome-container {
+  height: 90vh;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  width: 100%;
+}
+.card-bg {
+  width: 40%;
+  background-color: beige;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+}
+.left-userHome {
+  width: 50%;
+  height: 80vh;
+}

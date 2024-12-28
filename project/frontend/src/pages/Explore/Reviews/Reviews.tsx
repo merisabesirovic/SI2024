@@ -170,6 +170,7 @@ const StyledWrapper = styled("div")`
   width: 100%;
   padding: 2rem;
   box-sizing: border-box;
+  margin-top: 30px;
 
   .form {
     max-width: 700px;

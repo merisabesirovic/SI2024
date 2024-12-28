@@ -67,6 +67,13 @@ const StyledWrapper = styled.div`
   button:hover::before {
     transform: translate3d(100%, 0, 0);
   }
+     @media (max-width: 768px) {
+    button span {
+      color: white; 
+    }
+    button:hover span {
+      color: white; 
+    }
 `;
 
 export default Button;
