@@ -43,7 +43,7 @@ const Card = () => {
               </svg>
             </div>
           </div>
-          <div className="content">
+          <div className="content-email">
             <span className="title">Registracija je uspešna!</span>
             <p className="message">
               Proverite vaš email nalog kako biste potvrdili email adresu.

@@ -25,11 +25,11 @@ const Modal: React.FC<ModalProps> = ({
             <p className="card-description">{description}</p>
           </div>
           <div className="card-button-wrapper">
-            <button className="card-button secondary" onClick={onClose}>
-              Cancel
-            </button>
             <button className="card-button primary" onClick={onAction}>
               {actionLabel}
+            </button>
+            <button className="card-button secondary" onClick={onClose}>
+              Odustani
             </button>
           </div>
           <button className="exit-button" onClick={onClose}>
@@ -103,17 +103,17 @@ const StyledWrapper = styled.div`
     font-weight: 600;
   }
   .primary {
-    background-color: rgb(255, 114, 109);
+    background-color: rgb(255, 73, 66);
     color: white;
   }
   .primary:hover {
-    background-color: rgb(255, 73, 66);
+    background-color: rgb(255, 114, 109);
   }
   .secondary {
-    background-color: #ddd;
+    background-color: rgb(197, 197, 197);
   }
   .secondary:hover {
-    background-color: rgb(197, 197, 197);
+    background-color: #ddd;
   }
   .exit-button {
     display: flex;

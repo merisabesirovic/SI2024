@@ -1,0 +1,13 @@
+.icons-container {
+  background-color: #dee2e2;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 350px;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
+  padding: 8px;
+  gap: 20px;
+  align-items: center;
+  color: rgb(40, 39, 39);
+}

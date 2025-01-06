@@ -79,7 +79,7 @@ public async Task<IActionResult> GetAllFilesAsync(string bucketName, string fold
     // Map S3 objects to DTOs, constructing public URLs
     var s3Objects = result.S3Objects.Select(s =>
     {
-        // Construct the public URL for the image object
+       
         string publicUrl = $"https://{bucketName}.s3.amazonaws.com/{s.Key}";
 
         return new S3ObjectDto()

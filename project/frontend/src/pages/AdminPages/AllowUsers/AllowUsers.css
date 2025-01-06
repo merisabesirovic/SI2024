@@ -1,0 +1,77 @@
+.allow-users-page {
+  margin: 50px auto;
+  max-width: 800px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.allow-users-page h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.users-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.users-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.users-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.approve-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.approve-button:hover {
+  background-color: #45a049;
+}
+
+.no-users-message {
+  margin-top: 20px;
+  color: #555;
+  font-size: 18px;
+}
+
+.error-message {
+  color: red;
+  margin: 20px 0;
+  font-size: 18px;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+.search-bar input {
+  width: 40%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid gray;
+}

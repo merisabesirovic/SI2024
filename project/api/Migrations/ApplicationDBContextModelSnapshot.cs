@@ -51,19 +51,19 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "68067305-6b1f-454b-bb04-33f2881a75cc",
+                            Id = "ca33d7c2-2c60-4a8f-96bc-5949f727124c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a4ed2caf-c889-45e8-91d9-94e657fc7768",
+                            Id = "b1161fda-3e09-4e1b-aeaa-194ca5239f4f",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "82fae153-a351-49db-8724-3ad709296dea",
+                            Id = "56214309-7f80-4968-8f34-2b5c502a7c1a",
                             Name = "Local_company",
                             NormalizedName = "LOCAL_COMPANY"
                         });
@@ -250,6 +250,9 @@ namespace api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Photos")

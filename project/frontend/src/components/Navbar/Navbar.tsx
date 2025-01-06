@@ -13,16 +13,17 @@ const Navbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  const { token, userRole, setToken, setUserId, setUserRole } =
+    useContext(AppContext);
+
   const handleLogout = () => {
     localStorage.clear();
     setToken(null);
     setUserId(null);
     setUserRole(null);
-
     setIsModalOpen(false);
     navigate("/");
   };
-  const handleNavigate = () => {};
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -32,32 +33,61 @@ const Navbar: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  const { token, userRole, setToken, setUserId, setUserRole } =
-    useContext(AppContext);
-
   return (
     <nav className="navbar">
       <div className="navbar-logo">
         <img src={logo} alt="Logo" />
       </div>
       <div className={`navbar-links ${isOpen ? "open" : ""}`}>
-        <NavLink to={"/"}>
-          <button>Početna</button>
-        </NavLink>
-        <NavLink to={"/explore"}>
-          <button>Istraži</button>
-        </NavLink>
-        <NavLink to={"/aboutus"}>
-          <button>O nama</button>
-        </NavLink>
-        <NavLink to={"/contact"}>
-          <button>Kontakt</button>
-        </NavLink>
         {token ? (
           <>
-            <NavLink to={"/user_home"}>
-              <button className="button">Moj profil</button>
-            </NavLink>
+            {userRole === "Admin" && (
+              <>
+                <NavLink to={"/kreiraj"}>
+                  <button>Kreiraj</button>
+                </NavLink>
+                <NavLink to={"/admin/all_users"}>
+                  <button>Pregled korisnika</button>
+                </NavLink>
+                <NavLink to={"/pregled-atrakcija"}>
+                  <button>Pregled atrakcija</button>
+                </NavLink>
+                <NavLink to={"/admin/allow_users"}>
+                  <button>Korisnici na čekanju</button>
+                </NavLink>
+              </>
+            )}
+            {userRole === "User" && (
+              <>
+                <NavLink to={"/"}>
+                  <button>Početna</button>
+                </NavLink>
+                <NavLink to={"/explore"}>
+                  <button>Istraži</button>
+                </NavLink>
+                <NavLink to={"/aboutus"}>
+                  <button>O nama</button>
+                </NavLink>
+                <NavLink to={"/contact"}>
+                  <button>Kontakt</button>
+                </NavLink>
+                <NavLink to={"/user_home"}>
+                  <button>Moj profil</button>
+                </NavLink>
+              </>
+            )}
+
+            {userRole === "Local_company" && (
+              <>
+                <NavLink to={"/home_local"}>
+                  <button>Pregled stranice</button>
+                </NavLink>
+                <NavLink to={"/user_home"}>
+                  <button>Moj profil</button>
+                </NavLink>
+              </>
+            )}
+
             <button className="button" onClick={() => setIsModalOpen(true)}>
               Logout
               <IoMdLogOut size={20} />
@@ -65,10 +95,22 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
+            <NavLink to={"/"}>
+              <button>Početna</button>
+            </NavLink>
+            <NavLink to={"/explore"}>
+              <button>Istraži</button>
+            </NavLink>
+            <NavLink to={"/aboutus"}>
+              <button>O nama</button>
+            </NavLink>
+            <NavLink to={"/contact"}>
+              <button>Kontakt</button>
+            </NavLink>
             <NavLink to={"/login"}>
               <ButtonAnimated text={"Login"} />
             </NavLink>
-            <NavLink to={"/register"}>
+            <NavLink to={"/register_user"}>
               <ButtonAnimated text={"Register"} />
             </NavLink>
           </>

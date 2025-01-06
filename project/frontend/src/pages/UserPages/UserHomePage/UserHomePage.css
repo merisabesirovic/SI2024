@@ -2,8 +2,9 @@
   height: 90vh;
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: -7px;
   width: 100%;
+  flex-wrap: wrap-reverse;
 }
 .card-bg {
   width: 40%;

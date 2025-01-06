@@ -8,13 +8,13 @@
 }
 .favs {
   height: 100%;
-  padding: 20px;
+  padding: 30px;
   margin-right: auto;
   margin-left: auto;
 }
 .favs h2 {
-  margin-top: 10px;
+  margin: -20px 0 20 0px;
 }
 .carousel-container {
-  padding: 40px;
+  padding-bottom: 30px;
 }

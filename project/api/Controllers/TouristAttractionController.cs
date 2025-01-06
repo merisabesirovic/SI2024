@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using api.Data;
+using api.Dtos.Reviews;
 using api.Dtos.Tourist_Attraction;
 using api.Helpers;
 using api.Interfaces;
@@ -33,24 +35,23 @@ namespace api.Controllers
         }
 
         [HttpGet]
-    
-        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
 
-            var touristAttractions = await _attractionRepo.GetAllAsync(query);
-            var touristAttractionDto = touristAttractions.Select(s => s.ToAttractionDto()).ToList();
+    var touristAttractions = await _attractionRepo.GetAllAsync(query);
+    var touristAttractionDto = touristAttractions.Select(s => s.ToAttractionDto()).ToList();
 
-            foreach (var attractionDto in touristAttractionDto)
-            {
-                // Retrieve associated images from S3 and attach to DTO
-                var imageUrls = await GetImageUrlsFromS3Async(attractionDto.Id);
-                attractionDto.Photos = string.Join(",", imageUrls); // Combine URLs into a single string
-            }
+    foreach (var attractionDto in touristAttractionDto)
+    {
+        var imageUrls = await GetImageUrlsFromS3Async(attractionDto.Id);
+        attractionDto.Photos = imageUrls.Any() ? string.Join(",", imageUrls) : "No images available";
+    }
 
-            return Ok(touristAttractionDto);
-        }
+    return Ok(touristAttractionDto);
+}
+
  [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateAttractionRequestDto updateDto){
@@ -83,8 +84,10 @@ namespace api.Controllers
             return Ok(touristAttractionDto);
         }
 
-     [HttpPost("create")]
+    
+[HttpPost("create/{userId}")]
 public async Task<ActionResult> Create(
+    [FromRoute] string userId,  
     [FromForm] CreateAttractionRequestDto attractionDto,
     [FromForm] List<IFormFile> files,
     [FromForm] string bucketName)
@@ -92,22 +95,75 @@ public async Task<ActionResult> Create(
     if (!ModelState.IsValid)
         return BadRequest(ModelState);
 
-    // Create tourist attraction in the database
+    
     var attractionModel = attractionDto.ToAttractionFromDto();
+    attractionModel.OwnerId = userId;
+
+    // Create the tourist attraction and save it to the database
     await _attractionRepo.CreateAsync(attractionModel);
 
-    // Upload files to S3 and save URLs in the database
+    // Upload files to S3 and save the URLs in the database
     if (files != null && files.Any())
     {
         var imageUrls = await UploadFilesToS3Async(attractionModel.Id, files, bucketName);
 
-        // Save the image URLs in the database
-        attractionModel.Photos = string.Join(",", imageUrls); // Store as a comma-separated string
+        // Save the image URLs as a comma-separated string
+        attractionModel.Photos = string.Join(",", imageUrls);
         _context.TouristAttractions.Update(attractionModel);
         await _context.SaveChangesAsync();
     }
 
     return CreatedAtAction(nameof(GetById), new { id = attractionModel.Id }, attractionModel.ToAttractionDto());
+}
+
+// [HttpGet("checkCreated/{userId}")]
+// public async Task<IActionResult> CheckIfUserCreatedAttraction(string userId)
+// {
+//     // Check if the user already has a tourist attraction
+//     var existingAttraction = await _context.TouristAttractions
+//                                             .FirstOrDefaultAsync(ta => ta.OwnerId == userId);
+
+//     if (existingAttraction == null)
+//     {
+//         return NotFound("You have not created a tourist attraction yet.");
+//     }
+
+//     return Ok($"You have already created a tourist attraction {existingAttraction.Name}.");
+// }
+[HttpGet("myAttraction/{userId}")]
+public async Task<IActionResult> GetMyAttraction(string userId)
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
+
+    // Retrieve the tourist attraction created by the user, including reviews
+    var userAttraction = await _context.TouristAttractions
+                                        .Include(ta => ta.Reviews) 
+                                        .ThenInclude(r => r.User) // Ensure reviews are included
+                                        .FirstOrDefaultAsync(ta => ta.OwnerId == userId);
+
+    if (userAttraction == null)
+    {
+        // Return a response indicating no attraction is created
+        return Ok(new 
+        { 
+            hasCreatedAttraction = false, 
+            attraction = (object)null 
+        });
+    }
+
+    var userAttractionDto = userAttraction.ToAttractionDto();
+
+    // Retrieve associated images from S3 and attach to the DTO
+    var imageUrls = await GetImageUrlsFromS3Async(userAttraction.Id);
+    userAttractionDto.Photos = string.Join(",", imageUrls);
+
+    // Return the attraction details with reviews already included in the DTO
+    return Ok(new 
+    { 
+        hasCreatedAttraction = true, 
+        attraction = userAttractionDto 
+    });
 }
 
         [HttpDelete("{id:int}")]
@@ -167,38 +223,65 @@ public async Task<ActionResult> Create(
 
 
         private async Task<List<string>> GetImageUrlsFromS3Async(int id)
+{
+    var folderPrefix = $"{id}/";
+
+    var request = new ListObjectsV2Request
+    {
+        BucketName = "np.click",
+        Prefix = folderPrefix
+    };
+
+    var result = await _s3Client.ListObjectsV2Async(request);
+
+    if (result?.S3Objects == null || !result.S3Objects.Any())
+        return new List<string>(); // Return an empty list if no objects are found
+
+    return result.S3Objects
+        .Where(s => s != null) // Ensure no null objects in the list
+        .Select(s => $"https://np.click.s3.amazonaws.com/{s.Key}")
+        .ToList();
+}
+
+
+private async Task DeleteImagesFromS3Async(int id)
+{
+    var folderPrefix = $"{id}/";
+
+    try
+    {
+        // Create a request to list objects in the S3 bucket with the specified prefix.
+        var request = new ListObjectsV2Request()
         {
-            var folderPrefix = $"{id}/";
+            BucketName = "np.click",
+            Prefix = folderPrefix
+        };
 
-            var request = new ListObjectsV2Request()
-            {
-                BucketName = "np.click",
-                Prefix = folderPrefix
-            };
+        // Get the result of the object list request.
+        var result = await _s3Client.ListObjectsV2Async(request);
 
-            var result = await _s3Client.ListObjectsV2Async(request);
-            return result.S3Objects.Select(s => $"https://np.click.s3.amazonaws.com/{s.Key}").ToList();
-        }
-
-        private async Task DeleteImagesFromS3Async(int id)
+        // Check if there are objects to delete.
+        if (result.S3Objects != null && result.S3Objects.Any())
         {
-            var folderPrefix = $"{id}/";
-
-            var request = new ListObjectsV2Request()
-            {
-                BucketName = "np.click",
-                Prefix = folderPrefix
-            };
-
-            var result = await _s3Client.ListObjectsV2Async(request);
-
+            // Prepare a delete request for the objects found in the specified folder.
             var deleteObjectsRequest = new DeleteObjectsRequest()
             {
                 BucketName = "np.click",
                 Objects = result.S3Objects.Select(s => new KeyVersion { Key = s.Key }).ToList()
             };
 
+            // Delete the objects from S3.
             await _s3Client.DeleteObjectsAsync(deleteObjectsRequest);
         }
     }
-}
+    catch (AmazonS3Exception)
+    {
+        // Handle specific S3 exceptions if necessary.
+        throw;  // rethrow the exception to be handled elsewhere if needed
+    }
+    catch (Exception)
+    {
+        // Handle any other unforeseen exceptions.
+        throw;  // rethrow the exception to be handled elsewhere if needed
+    }
+}}}

@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "./AttractionsDetailsPage.css";
 import { motion } from "framer-motion";
 import { FaMapLocationDot } from "react-icons/fa6";
 import Reviews from "../Reviews/Reviews";
+import { FaPencilAlt } from "react-icons/fa";
+
 import Loader from "../../../components/Loader/Loader";
 import AddToFavorites from "../AddToFavorites/AddToFavorites";
-
+import EditModal from "../../../components/Modal/EditModal";
+import { AppContext } from "../../../context/AppContext";
 type Attraction = {
   id: string;
   name: string;
@@ -18,7 +23,13 @@ type Attraction = {
   longitude: string;
   latitude: string;
   category: string;
+  reviews: [];
 };
+interface AttractionDetailsPageProps {
+  propAttraction?: Attraction | null;
+
+  attractionId?: string;
+}
 
 const responsive = {
   superLargeDesktop: {
@@ -39,30 +50,45 @@ const responsive = {
   },
 };
 
-const AttractionDetailsPage = () => {
+const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
+  propAttraction,
+}) => {
   const { id } = useParams<{ id: string }>();
-  const [attraction, setAttraction] = useState<Attraction | null>(null);
-  const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [attraction, setAttraction] = useState<Attraction | null>(
+    propAttraction ?? null
+  );
   const [isLoading, setIsLoading] = useState(true);
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDesc] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [category, setCategory] = useState("");
+  const { userRole } = useContext(AppContext);
+  const adminOrCompany = userRole === "Local_company" || userRole === "Admin";
 
   useEffect(() => {
-    const fetchAttractionDetails = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `http://localhost:5241/api/tourist_attractions/${id}`
-        );
-        setAttraction(response.data);
-      } catch (error) {
-        console.error("Error fetching attraction details:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (!propAttraction) {
+      const fetchAttractionDetails = async () => {
+        try {
+          setIsLoading(true);
+          const response = await axios.get(
+            `http://localhost:5241/api/tourist_attractions/${id}`
+          );
+          setAttraction(response.data);
+        } catch (error) {
+          console.error("Error fetching attraction details:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-    fetchAttractionDetails();
-  }, [id]);
-
+      fetchAttractionDetails();
+    } else {
+      setIsLoading(false);
+    }
+  }, [id, propAttraction]);
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -75,6 +101,47 @@ const AttractionDetailsPage = () => {
       }
     );
   }, []);
+
+  const openEditModal = () => {
+    if (attraction) {
+      setName(attraction.name);
+      setDesc(attraction.description);
+      setLongitude(attraction.longitude);
+      setLatitude(attraction.latitude);
+      setCategory(attraction.category);
+      setIsModalOpen(true);
+    }
+  };
+  const calculateAverageRating = (reviews: Array<{ rating: number }>) => {
+    if (reviews.length === 0) return 0;
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return totalRating / reviews.length;
+  };
+
+  const handleUpdateAttraction = async () => {
+    try {
+      const updatedAttraction = {
+        id,
+        name,
+        description,
+        longitude,
+        latitude,
+        category,
+      };
+
+      const response = await axios.put(
+        `http://localhost:5241/api/tourist_attractions/${propAttraction?.id}`,
+        updatedAttraction
+      );
+
+      toast.success("Atrakcija uspešno ažurirana!");
+      setAttraction(response.data);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error updating attraction:", error);
+      toast.error("Došlo je do greške pri ažuriranju atrakcije.");
+    }
+  };
 
   if (isLoading) {
     return (
@@ -89,7 +156,7 @@ const AttractionDetailsPage = () => {
   }
 
   const photosArray = attraction.photos.split(",");
-
+  const averageRating = calculateAverageRating(attraction.reviews);
   return (
     <motion.div
       className="attraction-details"
@@ -97,6 +164,8 @@ const AttractionDetailsPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
+      <ToastContainer />
+
       <div
         className="background-image"
         style={{
@@ -137,6 +206,37 @@ const AttractionDetailsPage = () => {
         </div>
       </div>
 
+      {adminOrCompany && (
+        <div>
+          <button onClick={openEditModal} className="edit-button">
+            Uredi Atrakciju <FaPencilAlt size={18} />
+          </button>
+          <div className="average-rating">
+            <h3>
+              Prosečna ocena: {averageRating.toFixed(2)}{" "}
+              <span className="star-rating">★</span>
+            </h3>
+          </div>
+        </div>
+      )}
+
+      {isModalOpen && (
+        <EditModal
+          title="Izmena Atrakcije"
+          name={name}
+          description={description}
+          longitude={longitude}
+          latitude={latitude}
+          category={category}
+          onSave={handleUpdateAttraction}
+          onClose={() => setIsModalOpen(false)}
+          setName={setName}
+          setDesc={setDesc}
+          setLongitude={setLongitude}
+          setLatitude={setLatitude}
+          setCategory={setCategory}
+        />
+      )}
       <div className="carousel">
         <Carousel
           swipeable={false}
@@ -162,7 +262,6 @@ const AttractionDetailsPage = () => {
           ))}
         </Carousel>
       </div>
-
       <div className="iframe-container">
         <iframe
           className="gmap_iframe"
@@ -179,10 +278,17 @@ const AttractionDetailsPage = () => {
         </a>
       </div>
 
-      <Reviews attractionId={id!} />
-      <AddToFavorites attractionName={attraction.name} />
+      <Reviews
+        attractionId={id!}
+        initialReviews={attraction.reviews}
+        showForm={adminOrCompany}
+      />
+      {adminOrCompany ? (
+        <></>
+      ) : (
+        <AddToFavorites attractionName={attraction.name} />
+      )}
     </motion.div>
   );
 };
-
 export default AttractionDetailsPage;

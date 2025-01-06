@@ -56,9 +56,12 @@ const RegisterCompany = () => {
       toast.success("User registered successfully!");
       navigate("/confirm_email_local_company");
     } catch (error: any) {
-      console.error("Error during registration:", error.response || error);
-      if (error.response && error.response.data) {
-        toast.error(`Error: ${error.response.data.message}`);
+      console.error(
+        "Error during registration:",
+        error.response.data[0].description
+      );
+      if (error.response && error.response.data[0].description) {
+        toast.error(`Error: ${error.response.data[0].description}`);
       } else {
         toast.error("Unexpected error occurred.");
       }

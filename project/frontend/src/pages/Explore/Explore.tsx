@@ -12,7 +12,7 @@ type CategoryCardProps = {
   icon: React.ReactNode;
   description: string;
   bgColor: string;
-  onClick: () => void; // Added onClick property
+  onClick: () => void;
 };
 
 const CategoryCard = ({

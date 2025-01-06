@@ -46,10 +46,14 @@ namespace api.Repositories
             return await attractions.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
-        public async Task<TouristAttraction?> GetAsyncById(int id)
-        {
-            return await _context.TouristAttractions.Include(c => c.Reviews).FirstOrDefaultAsync(c=> c.Id == id);
-        }
+    public async Task<TouristAttraction?> GetAsyncById(int id)
+{
+    return await _context.TouristAttractions
+        .Include(c => c.Reviews)
+            .ThenInclude(r => r.User) // Include the User entity for each Review
+        .FirstOrDefaultAsync(c => c.Id == id);
+}
+
 
         public async Task<TouristAttraction?> GetByNameAsync(string name)
         {

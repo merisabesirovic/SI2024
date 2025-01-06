@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
@@ -9,6 +9,8 @@ import { PiSmileyBlankBold } from "react-icons/pi";
 import ReviewCard from "../../../components/ReviewCard/ReviewCard";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import Modal from "../../../components/Modal/Modal";
+import { AppContext } from "../../../context/AppContext";
 
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
@@ -47,30 +49,33 @@ type Review = {
   createdOn: string;
   createdBy: string;
 };
-type ReviewsProps = { attractionId: string };
+type ReviewsProps = {
+  attractionId: string;
+  initialReviews?: Review[];
+  showForm?: boolean;
+};
 
-const Reviews: React.FC<ReviewsProps> = ({ attractionId }) => {
-  const [reviews, setReviews] = useState<Review[]>([]);
+const Reviews: React.FC<ReviewsProps> = ({
+  attractionId,
+  initialReviews = [],
+  showForm,
+}) => {
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
   const [newReview, setNewReview] = useState({ rating: 0, comment: "" });
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5241/api/comment?attractionId=${attractionId}`
-        );
-        setReviews(response.data);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    };
-    fetchReviews();
-  }, [attractionId]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null);
+  const { token, userRole } = useContext(AppContext);
+  const username = localStorage.getItem("username");
+  const axiosInstance = axios.create({
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(
+      await axiosInstance.post(
         `http://localhost:5241/api/comment/${attractionId}`,
         newReview
       );
@@ -87,6 +92,41 @@ const Reviews: React.FC<ReviewsProps> = ({ attractionId }) => {
     } catch (error) {
       console.error("Error posting review:", error);
     }
+  };
+
+  const handleDeleteReview = async (
+    reviewId: number,
+    reviewCreatedBy: string
+  ) => {
+    if (
+      userRole === "admin" ||
+      userRole === "local_company" ||
+      username === reviewCreatedBy
+    ) {
+      try {
+        await axiosInstance.delete(
+          `http://localhost:5241/api/comment/${reviewId}`
+        );
+        setReviews((prevReviews) =>
+          prevReviews.filter((review) => review.id !== reviewId)
+        );
+        closeModal();
+      } catch (error) {
+        console.error("Error deleting review:", error);
+      }
+    } else {
+      alert("You do not have permission to delete this review.");
+    }
+  };
+
+  const openModal = (reviewId: number) => {
+    setSelectedReviewId(reviewId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedReviewId(null);
   };
 
   return (
@@ -108,59 +148,95 @@ const Reviews: React.FC<ReviewsProps> = ({ attractionId }) => {
               <div key={review.id} className="review-card-wrapper">
                 <ReviewCard
                   rating={review.rating}
-                  title={`Review by ${review.createdBy}`}
+                  title={`Autor: ${review.createdBy}`}
                   content={review.comment}
                   date={new Date(review.createdOn).toLocaleDateString()}
                 />
+                {(showForm || username === review.createdBy) && (
+                  <button
+                    className="submit-btn"
+                    onClick={() => openModal(review.id)}
+                  >
+                    Izbriši recenziju
+                  </button>
+                )}
               </div>
             ))
           ) : (
-            <div className="empty-reviews">
-              <p>No reviews yet. Be the first to leave a review!</p>
+            <div
+              className="empty-reviews"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "900px",
+              }}
+            >
+              <p style={{ textAlign: "center" }}>
+                Nema recenzija. Budite prvi i napišite recenziju!
+              </p>
             </div>
           )}
         </Carousel>
       </div>
-      <form className="form" onSubmit={handleSubmit}>
-        <h2 className="form-title">Ostavite recenziju</h2>
-        <div className="rating-container">
-          <p className="rating-label">Ocenite svoje iskustvo:</p>
-          <Rating
-            name="rating"
-            value={newReview.rating}
-            onChange={(e, value) =>
-              setNewReview({ ...newReview, rating: value || 0 })
+
+      {!showForm && (
+        <form className="form" onSubmit={handleSubmit}>
+          <h2 className="form-title">Ostavite recenziju</h2>
+          <div className="rating-container">
+            <p className="rating-label">Ocenite svoje iskustvo:</p>
+            <Rating
+              name="rating"
+              value={newReview.rating}
+              onChange={(e, value) =>
+                setNewReview({ ...newReview, rating: value || 0 })
+              }
+              IconContainerComponent={({ value }) => {
+                const isSelected = value === newReview.rating;
+                return (
+                  <span
+                    style={{
+                      color: isSelected ? "inherit" : "gray",
+                      opacity: isSelected ? 1 : 0.5,
+                      transform: isSelected ? "scale(1.2)" : "scale(1)",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    {customIcons[value]?.icon || <span />}
+                  </span>
+                );
+              }}
+              getLabelText={(value) => customIcons[value]?.label || ""}
+            />
+          </div>
+          <textarea
+            placeholder="Write your review here..."
+            value={newReview.comment}
+            onChange={(e) =>
+              setNewReview({ ...newReview, comment: e.target.value })
             }
-            IconContainerComponent={({ value }) => {
-              const isSelected = value === newReview.rating;
-              return (
-                <span
-                  style={{
-                    color: isSelected ? "inherit" : "gray",
-                    opacity: isSelected ? 1 : 0.5,
-                    transform: isSelected ? "scale(1.2)" : "scale(1)",
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  {customIcons[value]?.icon || <span />}
-                </span>
-              );
-            }}
-            getLabelText={(value) => customIcons[value]?.label || ""}
-          />
-        </div>
-        <textarea
-          placeholder="Write your review here..."
-          value={newReview.comment}
-          onChange={(e) =>
-            setNewReview({ ...newReview, comment: e.target.value })
+            required
+          ></textarea>
+          <button type="submit" className="submit">
+            Sačuvaj
+          </button>
+        </form>
+      )}
+
+      {isModalOpen && selectedReviewId !== null && (
+        <Modal
+          title="Potvrdite brisanje"
+          description="Da li ste sigurni da želite da izbrišete recenziju?"
+          actionLabel="Izbriši"
+          onAction={() =>
+            handleDeleteReview(
+              selectedReviewId,
+              reviews.find((review) => review.id === selectedReviewId)
+                ?.createdBy || ""
+            )
           }
-          required
-        ></textarea>
-        <button type="submit" className="submit">
-          Submit
-        </button>
-      </form>
+          onClose={closeModal}
+        />
+      )}
     </StyledWrapper>
   );
 };
@@ -219,6 +295,20 @@ const StyledWrapper = styled("div")`
   .rating-label {
     padding: 20px;
   }
+  .submit-btn {
+    padding: 0.75rem;
+    background-color: #e43b39;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+    max-width: 150px;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
   .submit:hover {
     background-color: #c2312f;
   }
@@ -227,17 +317,17 @@ const StyledWrapper = styled("div")`
     color: #2e2e2d;
   }
 
-  .carousel-container {
-    overflow: hidden;
-  }
-
-  .carousel-item-padding-40-px {
-    padding: 10px;
+  .review-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
   }
 
   .empty-reviews {
-    text-align: center;
-    padding: 20px;
+    margin-top: 2rem;
   }
 `;
 

@@ -35,7 +35,7 @@ namespace api.Service
                 new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
             };
 
-            // Retrieve roles for the user
+            
             var roles = await _userManager.GetRolesAsync(user);
             if (roles.Any())
             {

@@ -5,10 +5,11 @@ import axios from "axios";
 import "./PortfolioFavorites.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import Modal from "../../Modal/Modal"; // Adjust the path if needed.
+import Modal from "../../Modal/Modal";
+import Loader from "../../Loader/Loader";
 
 type PortfolioItem = {
-  id: number;
+  id: string;
   name: string;
   description: string;
   photos: string;
@@ -93,7 +94,11 @@ const PortfolioFavorites = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   if (error) {
@@ -120,6 +125,8 @@ const PortfolioFavorites = () => {
             return (
               <div key={item.id} className="carousel-item">
                 <FavoritesCard
+                  key={item.id}
+                  id={item.id}
                   name={item.name}
                   description={item.description}
                   photos={firstPhoto}
@@ -141,7 +148,7 @@ const PortfolioFavorites = () => {
           actionLabel="Izbrisi"
           onClose={() => setModalOpen(false)}
           title="Potvrda brisanja"
-          description="Da li ste sigurni da želite obrisati ovaj portfolio?"
+          description="Da li ste sigurni da želite ukloniti iz svoje liste omiljenih?"
         />
       )}
     </div>

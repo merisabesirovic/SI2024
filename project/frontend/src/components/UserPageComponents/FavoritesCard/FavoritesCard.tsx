@@ -2,8 +2,10 @@ import { PhotoSharp } from "@mui/icons-material";
 import React from "react";
 import styled from "styled-components";
 import { MdDeleteOutline } from "react-icons/md";
+import { NavLink } from "react-router-dom";
 
 type FavoritesCardProps = {
+  id: string;
   name: string;
   description: string;
   photos: string;
@@ -11,6 +13,7 @@ type FavoritesCardProps = {
 };
 
 const FavoritesCard: React.FC<FavoritesCardProps> = ({
+  id,
   name,
   description,
   photos,
@@ -20,6 +23,7 @@ const FavoritesCard: React.FC<FavoritesCardProps> = ({
     <StyledWrapper>
       <div className="card">
         <img src={photos} className="img" alt="attraction_image" />
+
         <div className="save">
           <svg
             className="svg"
@@ -64,8 +68,10 @@ const FavoritesCard: React.FC<FavoritesCardProps> = ({
         </div>
 
         <div className="text">
-          <p className="h3">{name} </p>
-          <p className="p"> {description.slice(0, 50)}... </p>
+          <NavLink to={`/attractions/${id}`}>
+            <p className="h3">{name} </p>
+            <p className="p"> {description.slice(0, 50)}... </p>
+          </NavLink>
           <div className="icon-box" onClick={onDelete}>
             <div className="span">
               Ukloni <MdDeleteOutline size={25} color="red" />
@@ -79,6 +85,7 @@ const FavoritesCard: React.FC<FavoritesCardProps> = ({
 
 const StyledWrapper = styled.div`
   .card {
+    cursor: auto;
     width: 252px;
     height: 400px;
     background: white;
@@ -113,6 +120,7 @@ const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: space-around;
+    cursor: pointer;
   }
 
   .save .svg {
@@ -156,7 +164,6 @@ const StyledWrapper = styled.div`
   }
 
   .card:hover {
-    cursor: pointer;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   }
 

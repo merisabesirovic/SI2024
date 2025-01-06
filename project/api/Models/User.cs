@@ -10,6 +10,8 @@ namespace api.Models
     {
       public List<Portfolio> Portfolios {get; set;} = new List<Portfolio>();
        public bool IsApproved { get; set; } = false;
+        
 
+   
     }
 }

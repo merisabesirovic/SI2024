@@ -1,5 +1,6 @@
 .attraction-details {
   text-align: center;
+  margin-top: -10px;
 }
 
 .attraction-title {
@@ -9,6 +10,23 @@
   color: #2e2e2d;
 
   font-weight: 700;
+}
+.edit-button {
+  padding: 13px 10px;
+  background-color: #086363;
+  color: white;
+  font-weight: 500;
+  border: 0;
+  border-radius: 7px;
+  font-size: 15px;
+}
+.average-rating {
+  padding: 15px;
+  color: #2e2e2d;
+}
+.edit-button:hover {
+  background-color: #0a8181;
+  cursor: pointer;
 }
 .carousel {
   margin: 3rem;

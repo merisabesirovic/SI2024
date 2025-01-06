@@ -47,7 +47,7 @@ body {
 }
 
 .Content {
-  margin-top: 60px;
+  margin-top: 100px;
   flex: 1;
 }
 .Navbar {
@@ -55,5 +55,8 @@ body {
   top: 0;
   z-index: 1000;
   width: 100%;
-  height: 60px;
+  height: 100px;
+}
+.react-multiple-carousel__arrow {
+  z-index: 10 !important;
 }

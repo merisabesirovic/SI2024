@@ -17,7 +17,7 @@ const AddToFavorites = ({ attractionName }: AddToFavoritesProps) => {
         `http://localhost:5241/api/portfolio?name=${encodeURIComponent(
           attractionName
         )}`,
-        null, // No request body
+        null,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }

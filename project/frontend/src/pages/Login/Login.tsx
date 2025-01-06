@@ -31,11 +31,12 @@ const Login = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("id", id);
       localStorage.setItem("role", user);
+      localStorage.setItem("username", response.data.userName);
       user === "Admin"
-        ? navigate("/admin_home")
+        ? navigate("/admin/all_users")
         : user === "User"
         ? navigate("/user_home")
-        : navigate("/local_company_home");
+        : navigate("/home_local");
       console.log(user);
       setToken(token);
       setUserId(id);
