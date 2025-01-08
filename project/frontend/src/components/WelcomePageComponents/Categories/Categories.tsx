@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import TouristCard from "../../TouristCard/TouristCard";
 import "./Categories.css";
 import { PiChurch, PiMosque } from "react-icons/pi";
@@ -7,11 +8,15 @@ import { GiAncientRuins, GiTreeGrowth } from "react-icons/gi";
 type Props = {};
 
 const Categories = (props: Props) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (category: string) => {
+    navigate(`/attractions?category=${category}`);
+  };
+
   return (
     <div className="app-container">
-      <h1  className="main-title">
-        Upoznajte se sa kulturom grada.
-      </h1>
+      <h1 className="main-title">Upoznajte se sa kulturom grada.</h1>
       <div className="card-container">
         <TouristCard
           title="Islamski spomenici"
@@ -21,7 +26,8 @@ const Categories = (props: Props) => {
           bgColor="#003333"
           buttonColor="#FF5C5C"
           icon={<PiMosque size={40} />}
-          category="islamic_monuments" // Pass category
+          category="islamic"
+          onClick={() => handleCardClick("islamic")}
         />
         <TouristCard
           title="Hrišćanski spomenici"
@@ -31,7 +37,8 @@ const Categories = (props: Props) => {
           bgColor="#D84C47"
           buttonColor="#FF5C5C"
           icon={<PiChurch size={40} />}
-          category="christian_monuments" // Pass category
+          category="christian"
+          onClick={() => handleCardClick("christian")}
         />
         <TouristCard
           title="Prirodne lepote Novog Pazara"
@@ -41,7 +48,8 @@ const Categories = (props: Props) => {
           bgColor="#006D5B"
           buttonColor="#36B37E"
           icon={<GiTreeGrowth size={40} />}
-          category="natural_beauties" // Pass category
+          category="natural"
+          onClick={() => handleCardClick("natural")}
         />
         <TouristCard
           title="Istorijski spomenici"
@@ -51,7 +59,8 @@ const Categories = (props: Props) => {
           bgColor="#C4B39A"
           buttonColor="#FF5C5C"
           icon={<GiAncientRuins size={40} />}
-          category="historical_monuments" // Pass category
+          category="historic"
+          onClick={() => handleCardClick("historic")}
         />
       </div>
     </div>

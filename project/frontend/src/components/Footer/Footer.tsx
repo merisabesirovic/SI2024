@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../../assets/images/logo.png";
 import { TbNoCopyright } from "react-icons/tb";
+import { NavLink } from "react-router-dom";
 
 import "./Footer.css";
 type Props = {};
@@ -16,15 +17,19 @@ const Footer = (props: Props) => {
         <p>All rights reserved</p>
       </div>
       <div className="links">
-        <p>Početna</p>
-        <p>Istraži</p>
-        <p>O nama</p>
-        <p>Kontakt</p>
+        <NavLink to={"/"}>
+          <p>Početna</p>
+        </NavLink>
+        <NavLink to={"/explore"}>
+          <p>Istraži</p>
+        </NavLink>
+        <NavLink to={"/aboutus"}>
+          <p>O nama</p>
+        </NavLink>
       </div>
       <div className="socials">
-        <p>Instagram</p>
-        <p>Facebook</p>
-        <p>Twitter</p>
+        <p>Email:</p>
+        <p>np.click.projekat@gmail.com</p>
       </div>
       <div className="team">
         <p>Team</p>

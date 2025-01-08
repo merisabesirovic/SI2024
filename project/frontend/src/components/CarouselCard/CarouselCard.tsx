@@ -6,7 +6,6 @@ interface CarouselCardProps {
   subtitle: string;
   description: string;
   image?: string;
-  path: string;
 }
 
 const CarouselCard: React.FC<CarouselCardProps> = ({
@@ -14,7 +13,6 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
   subtitle,
   description,
   image,
-  path,
 }) => {
   return (
     <div className="carousel-card">

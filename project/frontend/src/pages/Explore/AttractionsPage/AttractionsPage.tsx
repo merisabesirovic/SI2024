@@ -87,9 +87,9 @@ const AttractionsPage = () => {
 
     let sorted = [...attractions];
     if (order === "najnovije") {
-      sorted = sorted.reverse(); // Reverse the order for "Najnovije"
+      sorted = sorted.reverse();
     } else if (order === "najstarije") {
-      sorted = attractions; // Maintain the original fetched order
+      sorted = attractions;
     }
     setSortedAttractions(sorted);
   };

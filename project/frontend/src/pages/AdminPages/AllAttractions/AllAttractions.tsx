@@ -180,6 +180,7 @@ export default AllAttractions;
 
 const Container = styled.div`
   padding: 20px;
+  margin-top: 30px;
 `;
 
 const Controls = styled.div`

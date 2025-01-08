@@ -137,7 +137,7 @@ const Card: React.FC<CardProps> = ({
               </svg>
             </div>
             <div className="text-content">
-              <h2 className="card-title">{title}</h2>
+              <h2 className="crd-title">{title}</h2>
               <p className="card-description">{description}</p>
             </div>
             {extraInfo && !show && (
@@ -229,13 +229,14 @@ const StyledCard = styled.div`
     left: 0;
     right: 0;
 
-    .card-title {
-      font-size: 20px;
+    .crd-title {
+      font-size: 22px;
       margin: 0 0 8px;
       color: #fff;
       background-color: rgba(216, 76, 71, 0.8);
       display: inline;
       padding: 7px;
+      font-weight: 600;
     }
 
     .card-description {

@@ -29,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({
               {actionLabel}
             </button>
             <button className="card-button secondary" onClick={onClose}>
-              Odustani
+              Otkaži
             </button>
           </div>
           <button className="exit-button" onClick={onClose}>

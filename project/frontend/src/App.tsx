@@ -21,6 +21,7 @@ import CreateAttraction from "./pages/AdminPages/CreateAttraction/CreateAttracti
 import AllAttractions from "./pages/AdminPages/AllAttractions/AllAttractions";
 import HomePage from "./pages/LocalCompanyPages/HomePage.tsx/HomePage";
 import ScrollToTop from "./components/Helpers/ScrollToTop";
+import AboutUs from "./pages/AboutUs/AboutUs";
 function App() {
   return (
     <div className="App">
@@ -50,6 +51,7 @@ function App() {
           <Route path="/kreiraj" element={<CreateAttraction />} />
           <Route path="/pregled-atrakcija" element={<AllAttractions />} />
           <Route path="/home_local" element={<HomePage />} />
+          <Route path="/aboutus" element={<AboutUs></AboutUs>} />
         </Routes>
       </div>
       <Footer />

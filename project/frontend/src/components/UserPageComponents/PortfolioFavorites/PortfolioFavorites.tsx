@@ -139,7 +139,7 @@ const PortfolioFavorites = () => {
             );
           })
         ) : (
-          <p>Vaša lista omiljenih je prazna.</p>
+          <p style={{ width: "700px" }}>Vaša lista omiljenih je prazna.</p>
         )}
       </Carousel>
       {modalOpen && (

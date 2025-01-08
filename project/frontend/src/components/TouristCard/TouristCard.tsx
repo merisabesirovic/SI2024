@@ -1,19 +1,19 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "./TouristCard.css";
 
-interface TouristCardProps {
+type TouristCardProps = {
   title: string;
   subtitle: string;
   description: string;
   buttonText: string;
   bgColor: string;
   buttonColor: string;
-  icon?: React.ReactNode;
-  category: string; // New prop for category
-}
+  icon: React.ReactNode;
+  category: string;
+  onClick: () => void;
+};
 
-const TouristCard: React.FC<TouristCardProps> = ({
+const TouristCard = ({
   title,
   subtitle,
   description,
@@ -21,14 +21,8 @@ const TouristCard: React.FC<TouristCardProps> = ({
   bgColor,
   buttonColor,
   icon,
-  category, // Destructure category
-}) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/attractions?category=${category}`);
-  };
-
+  onClick,
+}: TouristCardProps) => {
   return (
     <div className="card" style={{ backgroundColor: bgColor }}>
       <div className="card-content">
@@ -37,9 +31,12 @@ const TouristCard: React.FC<TouristCardProps> = ({
         <h2 className="card-title">{title}</h2>
         <p className="card-description">{description}</p>
         <button
-          onClick={handleClick}
           className="card-button"
           style={{ backgroundColor: buttonColor }}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents click from bubbling to the card container
+            onClick();
+          }}
         >
           {buttonText}
         </button>

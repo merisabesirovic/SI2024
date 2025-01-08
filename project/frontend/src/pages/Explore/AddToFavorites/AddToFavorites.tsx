@@ -11,7 +11,14 @@ type AddToFavoritesProps = {
 };
 
 const AddToFavorites = ({ attractionName }: AddToFavoritesProps) => {
+  const token = localStorage.getItem("token");
+
   const handleAddToFavorites = async () => {
+    if (!token) {
+      toast.error("Morate biti prijavljeni da biste dodali u favorite.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `http://localhost:5241/api/portfolio?name=${encodeURIComponent(
@@ -19,7 +26,7 @@ const AddToFavorites = ({ attractionName }: AddToFavoritesProps) => {
         )}`,
         null,
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       toast.success("Uspešno dodato u favorite!");
@@ -39,9 +46,15 @@ const AddToFavorites = ({ attractionName }: AddToFavoritesProps) => {
         <p>
           Ukoliko želite da posetite ovo mesto ponovo, dodajte ga u favorite.
         </p>
-        <button className="submit" onClick={handleAddToFavorites}>
-          Dodaj {<GrFavorite />}
-        </button>
+        {token ? (
+          <button className="submit" onClick={handleAddToFavorites}>
+            Dodaj {<GrFavorite />}
+          </button>
+        ) : (
+          <div className="login-prompt">
+            <p>Morate biti prijavljeni da biste dodali u favorite.</p>
+          </div>
+        )}
         <ToastContainer
           position="bottom-right"
           autoClose={5000}
@@ -87,9 +100,16 @@ const StyledWrapper = styled("div")`
   .submit:hover {
     background-color: #c2312f;
   }
+
   .form-title {
     margin: 20px;
     color: #2e2e2d;
+  }
+
+  .login-prompt {
+    padding: 10px;
+    background-color: #f1f1f1;
+    text-align: center;
   }
 `;
 

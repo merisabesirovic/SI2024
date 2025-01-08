@@ -15,6 +15,7 @@
   z-index: 10000;
   position: sticky;
   background-color: whitesmoke;
+  height: 130px;
 }
 .button {
   display: flex;

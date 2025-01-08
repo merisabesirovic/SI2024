@@ -5,6 +5,7 @@ import PortfolioFavorites from "../../../components/UserPageComponents/Portfolio
 import ProfileCard from "../../../components/UserPageComponents/ProfileCard/ProfileCard";
 import Loader from "../../../components/Loader/Loader";
 import "./UserHomePage.css";
+import { useNavigate } from "react-router-dom";
 
 const UserHomePage = () => {
   const { token, userId } = useContext(AppContext);
@@ -12,9 +13,11 @@ const UserHomePage = () => {
     userName: "",
     email: "",
     isApproved: false,
+    roles: [],
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -68,7 +71,21 @@ const UserHomePage = () => {
     <div className="userHome-container">
       <div className="left-userHome">
         {error && <div style={{ color: "red" }}>{error}</div>}
-        <PortfolioFavorites />
+        {userInfo.roles[0] !== "Local_company" ? (
+          <PortfolioFavorites />
+        ) : (
+          <div className="company-dashboard">
+            <h3>Dobrodošli u vaš poslovni profil!</h3>
+            <p>
+              Ovde možete upravljati svim informacijama vezanim za vašu
+              kompaniju.
+            </p>
+            <p>
+              Klikom na "Pregled stranice" možete urediti svoju stranicu i
+              postati prava turistička atrakcija!
+            </p>
+          </div>
+        )}
       </div>
       <div className="card-bg">
         <h2>Vaš Profil</h2>

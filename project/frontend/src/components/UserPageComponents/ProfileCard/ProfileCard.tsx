@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaRegUserCircle, FaPencilAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   const { setToken, setUserId, setUserRole } = useContext(AppContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Enable the button if the username is different from the original one
+    setIsButtonEnabled(editedUserName !== userInfo.userName);
+  }, [editedUserName, userInfo.userName]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -35,7 +41,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     setIsEditing(false);
     setIsModalOpen(false); // Close the modal
     setIsButtonEnabled(false);
-    navigate("/");
+    navigate("/"); // Navigate after action
     setUserId(null);
     setUserRole(null);
     setToken(null);
@@ -69,7 +75,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     className="card__edit-icon"
                     onClick={() => {
                       setIsEditing(true);
-                      setIsButtonEnabled(true);
                     }}
                   />
                 </>

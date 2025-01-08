@@ -15,13 +15,20 @@
 .footer p {
   padding: 10px;
   cursor: pointer;
+  color: #aeb3ae !important;
 }
 
 .logo-section p {
-  cursor: default !important; /* Prevent pointer cursor */
+  cursor: default !important;
   color: inherit;
 }
 
 .footer p:hover {
   color: white;
+}
+.team p {
+  cursor: auto !important;
+}
+.socials p {
+  cursor: auto !important;
 }

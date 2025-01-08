@@ -2,6 +2,7 @@ import React from "react";
 import sebilj from "../../../assets/images/sebilj.jpg";
 import ButtonAnimated from "../../Button/ButtonAnimated";
 import "./Sebiljpage.css";
+import { NavLink } from "react-router-dom";
 type Props = {};
 
 const Sebiljpage = (props: Props) => {
@@ -15,7 +16,9 @@ const Sebiljpage = (props: Props) => {
           Otkrijte čari autentične kuhinje, znamenitosti i prirodnih lepota ovog
           jedinstvenog mesta.
         </p>
-        <ButtonAnimated text="Explore" />
+        <NavLink to={"/explore"}>
+          <ButtonAnimated text="Otkrij" />
+        </NavLink>
       </div>
       <div className="right-part">
         <img src={sebilj} alt="hamam" />

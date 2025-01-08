@@ -5,6 +5,7 @@ import Categories from "../../components/WelcomePageComponents/Categories/Catego
 import Sebiljpage from "../../components/WelcomePageComponents/SebiljPage/Sebiljpage";
 import CarouselPage from "../../components/WelcomePageComponents/CarouselPage/CarouselPage";
 import FoodPage from "../../components/WelcomePageComponents/FoodPage/FoodPage";
+import { NavLink } from "react-router-dom";
 
 const Welcome = (props: {}) => {
   return (
@@ -21,7 +22,9 @@ const Welcome = (props: {}) => {
             Otkrijte, Istražite i Uživajte u Gradu Novi Pazar preko našeg
             portala.
           </p>
-          <ButtonAnimated text="Istraži" />
+          <NavLink to={"/explore"}>
+            <ButtonAnimated text="Istraži" />
+          </NavLink>
         </div>
       </div>
       <Categories />

@@ -182,43 +182,51 @@ const Reviews: React.FC<ReviewsProps> = ({
       {!showForm && (
         <form className="form" onSubmit={handleSubmit}>
           <h2 className="form-title">Ostavite recenziju</h2>
-          <div className="rating-container">
-            <p className="rating-label">Ocenite svoje iskustvo:</p>
-            <Rating
-              name="rating"
-              value={newReview.rating}
-              onChange={(e, value) =>
-                setNewReview({ ...newReview, rating: value || 0 })
-              }
-              IconContainerComponent={({ value }) => {
-                const isSelected = value === newReview.rating;
-                return (
-                  <span
-                    style={{
-                      color: isSelected ? "inherit" : "gray",
-                      opacity: isSelected ? 1 : 0.5,
-                      transform: isSelected ? "scale(1.2)" : "scale(1)",
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    {customIcons[value]?.icon || <span />}
-                  </span>
-                );
-              }}
-              getLabelText={(value) => customIcons[value]?.label || ""}
-            />
-          </div>
-          <textarea
-            placeholder="Write your review here..."
-            value={newReview.comment}
-            onChange={(e) =>
-              setNewReview({ ...newReview, comment: e.target.value })
-            }
-            required
-          ></textarea>
-          <button type="submit" className="submit">
-            Sačuvaj
-          </button>
+          {username ? (
+            <>
+              <div className="rating-container">
+                <p className="rating-label">Ocenite svoje iskustvo:</p>
+                <Rating
+                  name="rating"
+                  value={newReview.rating}
+                  onChange={(e, value) =>
+                    setNewReview({ ...newReview, rating: value || 0 })
+                  }
+                  IconContainerComponent={({ value }) => {
+                    const isSelected = value === newReview.rating;
+                    return (
+                      <span
+                        style={{
+                          color: isSelected ? "inherit" : "gray",
+                          opacity: isSelected ? 1 : 0.5,
+                          transform: isSelected ? "scale(1.2)" : "scale(1)",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        {customIcons[value]?.icon || <span />}
+                      </span>
+                    );
+                  }}
+                  getLabelText={(value) => customIcons[value]?.label || ""}
+                />
+              </div>
+              <textarea
+                placeholder="Opišite svoje iskustvo ovde..."
+                value={newReview.comment}
+                onChange={(e) =>
+                  setNewReview({ ...newReview, comment: e.target.value })
+                }
+                required
+              ></textarea>
+              <button type="submit" className="submit">
+                Sačuvaj
+              </button>
+            </>
+          ) : (
+            <div className="login-prompt">
+              <p>Morate se prijaviti da biste ostavili recenziju.</p>
+            </div>
+          )}
         </form>
       )}
 
@@ -329,6 +337,11 @@ const StyledWrapper = styled("div")`
   .empty-reviews {
     margin-top: 2rem;
   }
-`;
 
+  .login-prompt {
+    padding: 10px;
+    background-color: #f1f1f1;
+    text-align: center;
+  }
+`;
 export default Reviews;

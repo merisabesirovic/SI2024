@@ -4,6 +4,7 @@ import logo from "../../assets/images/logo.png";
 import ButtonAnimated from "../Button/ButtonAnimated";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
+import GoogleTranslate from "../GoogleTranslate/GoogleTranslate";
 import { AppContext } from "../../context/AppContext";
 import { IoMdLogOut } from "react-icons/io";
 import Modal from "../Modal/Modal";
@@ -68,12 +69,11 @@ const Navbar: React.FC = () => {
                 <NavLink to={"/aboutus"}>
                   <button>O nama</button>
                 </NavLink>
-                <NavLink to={"/contact"}>
-                  <button>Kontakt</button>
-                </NavLink>
+
                 <NavLink to={"/user_home"}>
                   <button>Moj profil</button>
                 </NavLink>
+                {(userRole === "User" || !token) && <GoogleTranslate />}
               </>
             )}
 
@@ -99,20 +99,20 @@ const Navbar: React.FC = () => {
               <button>Početna</button>
             </NavLink>
             <NavLink to={"/explore"}>
-              <button>Istraži</button>
+              <button>Otkrij</button>
             </NavLink>
             <NavLink to={"/aboutus"}>
               <button>O nama</button>
             </NavLink>
-            <NavLink to={"/contact"}>
-              <button>Kontakt</button>
-            </NavLink>
+
             <NavLink to={"/login"}>
               <ButtonAnimated text={"Login"} />
             </NavLink>
             <NavLink to={"/register_user"}>
               <ButtonAnimated text={"Register"} />
             </NavLink>
+
+            {(userRole === "User" || !token) && <GoogleTranslate />}
           </>
         )}
       </div>
