@@ -15,6 +15,7 @@
   border-collapse: collapse;
   margin-bottom: 20px;
   color: rgb(68, 68, 68);
+  overflow-x: auto; /* Allows horizontal scrolling if the table overflows */
 }
 
 .user-table th,
@@ -22,7 +23,9 @@
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+  white-space: nowrap; /* Prevents the text from wrapping and makes the cells more compact */
 }
+
 .edit-user-modal h2 {
   margin: 10px;
 }
@@ -53,6 +56,7 @@
   padding: 10px;
   border-radius: 5px;
 }
+
 .select-role {
   padding: 7px;
   border: 1px solid gray;
@@ -79,7 +83,6 @@
 .edit-user-modal input {
   width: 100%;
   padding: 8px;
-
   border: 1px solid #ddd;
   border-radius: 4px;
   margin: 5px;
@@ -90,22 +93,27 @@
   justify-content: center;
   gap: 40px;
 }
+
 .modal-actions button {
   padding: 10px 12px;
   border-radius: 5px;
   border: 0px;
 }
+
 .modal-actions button:hover {
   cursor: pointer;
   background-color: rgb(189, 187, 187);
 }
+
 .search-bar {
   margin-bottom: 20px;
 }
+
 .labels {
   font-weight: 700;
   padding: 10px;
 }
+
 .search-bar input {
   width: 40%;
   padding: 10px;
@@ -136,4 +144,54 @@
 .pagination button:hover {
   background-color: #007bff;
   color: white;
+}
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .user-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .user-table th,
+  .user-table td {
+    display: block;
+    text-align: left;
+    padding: 10px 20px;
+    width: 100%;
+  }
+
+  .user-table th {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination button {
+    margin: 5px 0;
+  }
+
+  .search-bar input {
+    width: 80%;
+    margin-bottom: 15px;
+  }
+
+  .edit-user-modal {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-bar input {
+    width: 90%;
+  }
+
+  .user-table td {
+    padding: 5px 10px;
+  }
 }

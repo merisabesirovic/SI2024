@@ -26,13 +26,13 @@ const CategoryCard = ({
   return (
     <div
       className="category-card"
-      onClick={onClick} // Attach the onClick handler
+      onClick={onClick} 
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: bgColor,
-        cursor: "pointer", // Indicate clickability
+        cursor: "pointer", 
       }}
     >
       <div className="overlay">

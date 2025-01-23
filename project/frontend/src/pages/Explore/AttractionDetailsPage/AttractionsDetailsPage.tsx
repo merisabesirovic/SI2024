@@ -134,7 +134,6 @@ const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
         updatedAttraction
       );
 
-      toast.success("Atrakcija uspešno ažurirana!");
       setAttraction(response.data);
       setIsModalOpen(false);
     } catch (error) {
@@ -164,8 +163,6 @@ const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <ToastContainer />
-
       <div
         className="background-image"
         style={{
@@ -173,10 +170,11 @@ const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "relative",
-          height: "50vh",
+          height: "80vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
         }}
       >
         <div
@@ -202,17 +200,19 @@ const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
           >
             {attraction.name}
           </motion.p>
-          <p className="description">{attraction.description}</p>
+          <p className="description" style={{marginLeft:"20px", marginRight:"20px"}}>{attraction.description}</p>
         </div>
       </div>
 
       {adminOrCompany && (
         <div>
-          <button onClick={openEditModal} className="edit-button">
-            Uredi Atrakciju <FaPencilAlt size={18} />
-          </button>
+          {userRole === "Local_company" && (
+            <button onClick={openEditModal} className="edit-button">
+              Uredi Atrakciju <FaPencilAlt size={18} />
+            </button>
+          )}
           <div className="average-rating">
-            <h3>
+            <h3 style={{ padding: "20px", marginTop: "10px" }}>
               Prosečna ocena: {averageRating.toFixed(2)}{" "}
               <span className="star-rating">★</span>
             </h3>
@@ -269,7 +269,7 @@ const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
           title="Google Map"
         ></iframe>
 
-        <a
+        <a 
           href={`https://www.google.com/maps/dir/${location.lat},${location.lng}/${attraction.longitude},${attraction.latitude}/?entry=ttu`}
           target="_blank"
           rel="noopener noreferrer"
@@ -277,6 +277,7 @@ const AttractionDetailsPage: React.FC<AttractionDetailsPageProps> = ({
           Prikaži putanju <FaMapLocationDot />
         </a>
       </div>
+      <ToastContainer />
 
       <Reviews
         attractionId={id!}

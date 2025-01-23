@@ -1,13 +1,15 @@
 .allow-users-page {
   margin: 50px auto;
-  max-width: 800px;
+  max-width: 100%;
   font-family: Arial, sans-serif;
   text-align: center;
+  padding: 0 20px;
 }
 
 .allow-users-page h1 {
   color: #333;
   margin-bottom: 20px;
+  font-size: 24px;
 }
 
 .users-table {
@@ -68,10 +70,58 @@
   align-items: center;
   height: 300px;
 }
+
 .search-bar input {
-  width: 40%;
+  width: 100%;
+  max-width: 400px;
   padding: 10px;
   font-size: 16px;
   border-radius: 10px;
   border: 1px solid gray;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .allow-users-page {
+    padding: 10px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 8px;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .users-table {
+    font-size: 14px;
+  }
+
+  .approve-button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .allow-users-page h1 {
+    font-size: 20px;
+  }
+
+  .search-bar input {
+    font-size: 14px;
+  }
+
+  .approve-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 6px;
+    font-size: 12px;
+  }
 }

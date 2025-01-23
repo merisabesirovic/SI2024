@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "./CreateAttraction.css";
 import { AppContext } from "../../../context/AppContext";
 
@@ -24,7 +23,7 @@ const CreateAttraction = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const { userId } = useContext(AppContext);
+  const { userId, userRole } = useContext(AppContext);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -93,6 +92,9 @@ const CreateAttraction = () => {
         category: "Islamic",
         files: [],
       });
+      if (userRole === "Local_company") {
+        window.location.reload();
+      }
     } catch (error) {
       console.error("Error creating attraction:", error);
       toast.error("Došlo je do greške prilikom kreiranja atrakcije.");

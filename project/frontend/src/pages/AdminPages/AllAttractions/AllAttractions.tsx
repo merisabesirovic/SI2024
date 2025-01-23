@@ -182,9 +182,9 @@ const Container = styled.div`
   padding: 20px;
   margin-top: 30px;
 `;
-
 const Controls = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 
@@ -193,19 +193,34 @@ const Controls = styled.div`
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 
   select {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    input,
+    select {
+      width: 100%;
+    }
   }
 `;
 
 const Pagination = styled.div`
   display: flex;
-  align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
 
   button {
     padding: 8px 16px;
@@ -219,10 +234,25 @@ const Pagination = styled.div`
       opacity: 0.5;
     }
   }
+
+  span {
+    margin-top: 10px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    justify-content: center; /* Ensures it aligns properly in the center */
+  }
 `;
 
 const CardsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; /* Stack cards vertically on small screens */
+  }
 `;

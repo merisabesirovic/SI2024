@@ -10,15 +10,19 @@ namespace api.Dtos.Tourist_Attraction
        
 
         [Required]
-        [MaxLength(25, ErrorMessage = "Name must be less than 25 characters")]
+        [MaxLength(200, ErrorMessage = "Ime mora da bude kraće od 25 karaktera")]
          public string Name {get; set;} = string.Empty;
          [Required]
-        [MaxLength(2000, ErrorMessage = "Description must be less than 2000 characters")]
+        [MaxLength(2500, ErrorMessage = "Opis mora biti kraći od 2000 karaktera")]
+
         public string Description {get; set;} = string.Empty;
         [Required]
-        [MaxLength(50, ErrorMessage = "Location must be less than 50 characters")]
+        [MaxLength(50, ErrorMessage = "Lokacija mora imati manje od 50 karaktera")]
+       
         public string Longitude {get; set;} = string.Empty;
         [Required]
+        [MaxLength(50, ErrorMessage = "Lokacija mora imati manje od 50 karaktera")]
+
         public string Latitude {get;set;} = string.Empty;
          
         public string Category { get; set; } = string.Empty;

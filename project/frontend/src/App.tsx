@@ -1,5 +1,7 @@
 import React from "react";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Welcome from "./pages/Welcome/Welcome";
 import Login from "./pages/Login/Login";
 import Footer from "./components/Footer/Footer";

@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import ButtonAnimated from "../Button/ButtonAnimated";
 import "./Navbar.css";
-import { useNavigate } from "react-router-dom";
 import GoogleTranslate from "../GoogleTranslate/GoogleTranslate";
 import { AppContext } from "../../context/AppContext";
 import { IoMdLogOut } from "react-icons/io";
@@ -34,6 +33,13 @@ const Navbar: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
+  // Function to close the menu when a NavLink is clicked
+  const closeMenu = () => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -44,33 +50,33 @@ const Navbar: React.FC = () => {
           <>
             {userRole === "Admin" && (
               <>
-                <NavLink to={"/kreiraj"}>
+                <NavLink to={"/kreiraj"} onClick={closeMenu}>
                   <button>Kreiraj</button>
                 </NavLink>
-                <NavLink to={"/admin/all_users"}>
+                <NavLink to={"/admin/all_users"} onClick={closeMenu}>
                   <button>Pregled korisnika</button>
                 </NavLink>
-                <NavLink to={"/pregled-atrakcija"}>
+                <NavLink to={"/pregled-atrakcija"} onClick={closeMenu}>
                   <button>Pregled atrakcija</button>
                 </NavLink>
-                <NavLink to={"/admin/allow_users"}>
+                <NavLink to={"/admin/allow_users"} onClick={closeMenu}>
                   <button>Korisnici na čekanju</button>
                 </NavLink>
               </>
             )}
             {userRole === "User" && (
               <>
-                <NavLink to={"/"}>
+                <NavLink to={"/"} onClick={closeMenu}>
                   <button>Početna</button>
                 </NavLink>
-                <NavLink to={"/explore"}>
+                <NavLink to={"/explore"} onClick={closeMenu}>
                   <button>Istraži</button>
                 </NavLink>
-                <NavLink to={"/aboutus"}>
+                <NavLink to={"/aboutus"} onClick={closeMenu}>
                   <button>O nama</button>
                 </NavLink>
 
-                <NavLink to={"/user_home"}>
+                <NavLink to={"/user_home"} onClick={closeMenu}>
                   <button>Moj profil</button>
                 </NavLink>
                 {(userRole === "User" || !token) && <GoogleTranslate />}
@@ -79,10 +85,10 @@ const Navbar: React.FC = () => {
 
             {userRole === "Local_company" && (
               <>
-                <NavLink to={"/home_local"}>
+                <NavLink to={"/home_local"} onClick={closeMenu}>
                   <button>Pregled stranice</button>
                 </NavLink>
-                <NavLink to={"/user_home"}>
+                <NavLink to={"/user_home"} onClick={closeMenu}>
                   <button>Moj profil</button>
                 </NavLink>
               </>
@@ -95,20 +101,20 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
-            <NavLink to={"/"}>
+            <NavLink to={"/"} onClick={closeMenu}>
               <button>Početna</button>
             </NavLink>
-            <NavLink to={"/explore"}>
+            <NavLink to={"/explore"} onClick={closeMenu}>
               <button>Otkrij</button>
             </NavLink>
-            <NavLink to={"/aboutus"}>
+            <NavLink to={"/aboutus"} onClick={closeMenu}>
               <button>O nama</button>
             </NavLink>
 
-            <NavLink to={"/login"}>
+            <NavLink to={"/login"} onClick={closeMenu}>
               <ButtonAnimated text={"Login"} />
             </NavLink>
-            <NavLink to={"/register_user"}>
+            <NavLink to={"/register_user"} onClick={closeMenu}>
               <ButtonAnimated text={"Register"} />
             </NavLink>
 

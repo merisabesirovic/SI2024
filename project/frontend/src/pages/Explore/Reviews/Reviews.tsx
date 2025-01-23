@@ -11,7 +11,9 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Modal from "../../../components/Modal/Modal";
 import { AppContext } from "../../../context/AppContext";
+import { toast, ToastContainer } from "react-toastify";
 
+const MAX_COMMENT_LENGTH = 150;
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
   desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
@@ -71,22 +73,31 @@ const Reviews: React.FC<ReviewsProps> = ({
       Authorization: `Bearer ${token}`,
     },
   });
-
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length > MAX_COMMENT_LENGTH) {
+      toast.warning(
+        `Maksimalna dužina komentara je ${MAX_COMMENT_LENGTH} karaktera!`
+      );
+      return;
+    }
+    setNewReview((prev) => ({ ...prev, comment: value }));
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axiosInstance.post(
+      const response = await axiosInstance.post(
         `http://localhost:5241/api/comment/${attractionId}`,
         newReview
       );
+      const savedReview = response.data;
       setNewReview({ rating: 0, comment: "" });
       setReviews((prevReviews) => [
         ...prevReviews,
         {
-          ...newReview,
-          id: Date.now(),
+          ...savedReview,
           createdOn: new Date().toISOString(),
-          createdBy: "You",
+          createdBy: username || "You",
         },
       ]);
     } catch (error) {
@@ -164,15 +175,9 @@ const Reviews: React.FC<ReviewsProps> = ({
             ))
           ) : (
             <div
-              className="empty-reviews"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                width: "900px",
-              }}
-            >
+              className="empty-reviews">
               <p style={{ textAlign: "center" }}>
-                Nema recenzija. Budite prvi i napišite recenziju!
+                Nema recenzija za ovu stranicu.
               </p>
             </div>
           )}
@@ -213,11 +218,12 @@ const Reviews: React.FC<ReviewsProps> = ({
               <textarea
                 placeholder="Opišite svoje iskustvo ovde..."
                 value={newReview.comment}
-                onChange={(e) =>
-                  setNewReview({ ...newReview, comment: e.target.value })
-                }
+                onChange={handleCommentChange}
                 required
               ></textarea>
+              <p className="char-counter">
+                {newReview.comment.length}/{MAX_COMMENT_LENGTH}
+              </p>
               <button type="submit" className="submit">
                 Sačuvaj
               </button>
@@ -229,6 +235,7 @@ const Reviews: React.FC<ReviewsProps> = ({
           )}
         </form>
       )}
+      <ToastContainer />
 
       {isModalOpen && selectedReviewId !== null && (
         <Modal
@@ -336,6 +343,10 @@ const StyledWrapper = styled("div")`
 
   .empty-reviews {
     margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    width: 900px;
+
   }
 
   .login-prompt {
@@ -343,5 +354,10 @@ const StyledWrapper = styled("div")`
     background-color: #f1f1f1;
     text-align: center;
   }
+    @media (max-width: 920px) {
+    .empty-reviews{
+    width:350px;
+    }
+
 `;
 export default Reviews;

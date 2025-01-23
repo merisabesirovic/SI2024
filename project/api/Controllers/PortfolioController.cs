@@ -49,7 +49,7 @@ namespace api.Controllers
             }
             var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
             if(userPortfolio.Any(e=> e.Name.ToLower() == name.ToLower()))
-                return BadRequest("Cannot add same tourist attraction to portfolio");
+                return BadRequest("Ova turistička atrakcija je već dodata u favorite");
 
                 var portfolioModel = new Portfolio{
                     TouristAttractionId = attraction.Id,

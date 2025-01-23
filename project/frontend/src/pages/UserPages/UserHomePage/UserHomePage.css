@@ -6,6 +6,7 @@
   width: 100%;
   flex-wrap: wrap-reverse;
 }
+
 .card-bg {
   width: 40%;
   background-color: beige;
@@ -15,10 +16,12 @@
   flex-direction: column;
   gap: 30px;
 }
+
 .left-userHome {
   width: 50%;
   height: 80vh;
 }
+
 .company-dashboard {
   background-color: #f0f0f0;
   padding: 20px;
@@ -68,4 +71,27 @@
 .action-item:hover {
   background-color: #f8f8f8;
   cursor: pointer;
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
+  .userHome-container {
+    flex-direction: column; /* Stack elements vertically */
+    height: auto;
+  }
+
+  .card-bg {
+    width: 100%; /* Make card section take full width */
+    margin-bottom: 20px; /* Space between profile and portfolio */
+  }
+
+  .left-userHome {
+    width: 100%; /* Make the left section take full width */
+    height: auto; /* Adjust height automatically */
+  }
+
+  .company-dashboard {
+    margin-left: 0; /* Remove the left margin */
+    margin-top: 10px; /* Add top margin */
+  }
 }
